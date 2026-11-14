@@ -62,12 +62,12 @@ function $(i){return document.getElementById(i)}
 function me(){return String(window.ME||"").toLowerCase()}
 function isA(){return me()==ADM}
 function vis(g){return isA()||(!!g.t&&String(g.t).toLowerCase()==me())}
-function VG(){return D.g.filter(vis)}
+function VG(){return D.g.filter(function(g){return vis(g)&&!g.ar})}
 function mg(c,L,gs){
  c.g=c.g||[];c.s=c.s||[];c.a=c.a||{};c.p=c.p||{};c.t=c.t||[];c.h=c.h||{};
  var ids={},inG=function(x){return gs.indexOf(x)>=0};
  c.s.forEach(function(s){if(inG(s.g))ids[s.id]=1});L.s.forEach(function(s){if(inG(s.g))ids[s.id]=1});
- gs.forEach(function(g){var lg=L.g.find(function(x){return x.id==g});var i=c.g.findIndex(function(x){return x.id==g});if(lg){if(i>=0)c.g[i]=lg;else c.g.push(lg)}});
+ gs.forEach(function(g){var lg=L.g.find(function(x){return x.id==g});var i=c.g.findIndex(function(x){return x.id==g});if(lg){if(i>=0)c.g[i]=lg;else c.g.push(lg)}else if(i>=0)c.g.splice(i,1)});
  c.s=c.s.filter(function(s){return !inG(s.g)}).concat(L.s.filter(function(s){return inG(s.g)}));
  ["a","h"].forEach(function(f){Object.keys(c[f]).forEach(function(k){if(inG(k.split("|")[0]))delete c[f][k]});Object.keys(L[f]||{}).forEach(function(k){if(inG(k.split("|")[0]))c[f][k]=L[f][k]})});
  Object.keys(c.p).forEach(function(k){if(ids[k.split("|")[0]])delete c.p[k]});
@@ -101,6 +101,10 @@ function gS(v){var g=GR();g.st=v;sv(g.id);R()}
 function gDay(n){var g=GR();g.dy=g.dy||[];var i=g.dy.indexOf(n);if(i<0)g.dy.push(n);else g.dy.splice(i,1);sv(g.id);V.dg="";R()}
 function gPre(n){var g=GR();g.dy=n==1?[1,3,5]:[2,4,6];sv(g.id);V.dg="";R()}
 function gT(v){var g=GR();g.t=v.trim().toLowerCase().replace(/@.*$/,"");sv(g.id);R()}
+function gE(f,v){var g=GR();g[f]=f=="pr"?+v||0:v.trim();sv(g.id);R()}
+function gAr(){var g=GR();if(V.x!="ga"){V.x="ga";R();return}g.ar=td();V.x="";sv(g.id);V.v="h";R()}
+function gRe(i){var g=D.g.find(function(x){return x.id==i});delete g.ar;sv(i);R()}
+function gDel(i){if(V.x!="gd"+i){V.x="gd"+i;R();return}D.g=D.g.filter(function(x){return x.id!=i});D.s=D.s.filter(function(x){return x.g!=i});D.t=D.t.filter(function(x){return x.g!=i});Object.keys(D.a).forEach(function(k){if(k.indexOf(i+"|")==0)delete D.a[k]});Object.keys(D.h).forEach(function(k){if(k.indexOf(i+"|")==0)delete D.h[k]});V.x="";sv(i);R()}
 function addS(){var n=$("sn").value.trim();if(!n)return;D.s.push({id:uid(),n:n,g:V.g,ph:$("sp").value.trim(),ph2:$("sq").value.trim(),j:$("sj").value||cm(),dc:+$("sd").value||0});sv(V.g);R()}
 function eS(f,v){var s=D.s.find(function(x){return x.id==V.s});s[f]=v.trim();sv(s.g);R()}
 function arS(i){if(V.x!=i){V.x=i;R();return}var s=D.s.find(function(x){return x.id==i});s.ar=td();V.x="";sv(s.g);R()}
@@ -149,12 +153,13 @@ function R(){
   (A?"<div class='c'><b>Yangi guruh</b><div class='r'><input id='gn' placeholder='Guruh nomi'></div><div class='r'><input id='gp' type='number' placeholder='Oylik toʻlov (soʻm)'><input id='gt' placeholder='Vaqti'></div><label>Dars kunlari</label><select id='gd'><option value='1,3,5'>Toq (Du-Chor-Ju)</option><option value='2,4,6'>Juft (Se-Pay-Sha)</option><option value=''>Keyin belgilayman</option></select><label>Oʻqituvchi logini (masalan: ustoz1)</label><input id='gtl' autocapitalize='none'><label>Guruh ochilgan oy</label><input id='gm' type='month' value='"+cmn+"'><div class='r'><button class='b on' onclick='addG()'>＋ Guruh qoʻshish</button></div></div>":"")+
   "<div class='c'><b>📈 Hisobot</b><div style='margin-top:6px'>Shu oy tushum: <b class='ok'>"+fm(col)+"</b> soʻm</div><div>Jami qarz: <b class='bad'>"+fm(tdb)+"</b> soʻm ("+dl.length+" kishi)</div>"+dl.slice(0,15).map(function(x){return "<div class='sp' style='margin-top:6px'><button class='nm' onclick=\"go('u','"+x[0].g+"','"+x[0].id+"')\">"+esc(x[0].n)+"</button><span class='bad'>"+fm(x[1])+"</span></div>"}).join("")+"</div>"+
   "<div class='c'><b>📢 Ota-onalarga yangilik</b><div class='r'><textarea id='nw' rows='3' placeholder='Xabar matni...'></textarea></div><div class='r'><button class='b on' onclick='sndN()'>📨 Hammaga yuborish</button></div></div>"+
+  (A&&D.g.some(function(g){return g.ar})?"<div class='c'><b>📦 Yopilgan guruhlar</b>"+D.g.filter(function(g){return g.ar}).map(function(g){return "<div class='sp' style='margin-top:8px'><span>"+esc(g.n)+"</span><div class='r' style='margin:0'><button class='b' onclick=\"gRe('"+g.id+"')\">↩ Ochish</button><button class='b' onclick=\"gDel('"+g.id+"')\">"+(V.x=="gd"+g.id?"Aniqmi?":"🗑")+"</button></div></div>"}).join("")+"</div>":"")+
   (A?"<div class='c'><b>💾 Zaxira nusxa</b><div class='mu'>Haftada bir marta yuklab oling</div><div class='r'><button class='b' onclick='bk()'>⬇ Yuklab olish</button></div></div>":"");
  }
  if(V.v=="g"){
   var g=GR(),ss=ST(g.id),T=[["a","Davomat"],["p","Toʻlov"],["t","Test"],["s","Oʻquvchilar"]];
   h="<button class='b' onclick=\"go('h')\">‹ Guruhlar</button><div class='sp'><h2>"+esc(g.n)+"</h2>"+(A?"<button class='b' onclick=\"S('sg',"+(V.sg?0:1)+")\">⚙️</button>":"")+"</div><div class='mu'>"+dyl(g)+(g.t?" · 👨‍🏫 "+esc(g.t):"")+"</div>";
-  if(A&&V.sg){h+="<div class='c'><b>⚙️ Guruh sozlamalari</b><label>Dars kunlari</label><div class='r wr'>"+DO.map(function(n){return "<button class='b"+((g.dy||[]).indexOf(n)>=0?" on":"")+"' onclick='gDay("+n+")'>"+DN[n]+"</button>"}).join("")+"</div><div class='r wr'><button class='b' onclick='gPre(1)'>Toq (Du-Chor-Ju)</button><button class='b' onclick='gPre(2)'>Juft (Se-Pay-Sha)</button></div><label>Oʻqituvchi logini</label><input value='"+esc(g.t||"")+"' autocapitalize='none' onchange=\"gT(this.value)\"><label>Guruh ochilgan oy</label><input type='month' value='"+gst(g)+"' onchange=\"gS(this.value)\"></div>"}
+  if(A&&V.sg){h+="<div class='c'><b>⚙️ Guruh sozlamalari</b><label>Guruh nomi</label><input value='"+esc(g.n)+"' onchange=\"gE('n',this.value)\"><label>Oylik toʻlov (soʻm)</label><input type='number' value='"+(g.pr||"")+"' onchange=\"gE('pr',this.value)\"><label>Vaqti</label><input value='"+esc(g.tm||"")+"' onchange=\"gE('tm',this.value)\"><label>Dars kunlari</label><div class='r wr'>"+DO.map(function(n){return "<button class='b"+((g.dy||[]).indexOf(n)>=0?" on":"")+"' onclick='gDay("+n+")'>"+DN[n]+"</button>"}).join("")+"</div><div class='r wr'><button class='b' onclick='gPre(1)'>Toq (Du-Chor-Ju)</button><button class='b' onclick='gPre(2)'>Juft (Se-Pay-Sha)</button></div><label>Oʻqituvchi logini</label><input value='"+esc(g.t||"")+"' autocapitalize='none' onchange=\"gT(this.value)\"><label>Guruh ochilgan oy</label><input type='month' value='"+gst(g)+"' onchange=\"gS(this.value)\"><div class='r'><button class='b' onclick='gAr()'>"+(V.x=="ga"?"Aniqmi? Guruhni yopish":"📦 Guruhni yopish")+"</button></div></div>"}
   h+="<div class='tabs'>"+T.map(function(t){return "<button class='b"+(V.tab==t[0]?" on":"")+"' onclick=\"S('tab','"+t[0]+"')\">"+t[1]+"</button>"}).join("")+"</div>";
   if(V.tab=="a"){var cd=curD(g),l=ldates(g,8),ch=l.slice(),sh=hk(g,cd);if(ch.indexOf(cd)<0){ch.push(cd);ch.sort()}
    var a=cur(),dn=Object.keys(V.dr).length,c=ss.filter(function(s){return a[s.id]==1}).length,n=ss.filter(function(s){return a[s.id]===0}).length;
