@@ -108,13 +108,13 @@ function dyl(g){var d=g.dy||[];if(!d.length)return "dars kunlari belgilanmagan";
 function ldates(g,n){var o=[],dy=g.dy||[];if(!dy.length)return o;var d=new Date();d.setHours(12,0,0,0);for(var c=0;o.length<n&&c<120;c++){if(dy.indexOf(d.getDay())>=0){var s=dstr(d);if(s>=gst(g)+"-01")o.push(s)}d.setDate(d.getDate()-1)}return o.reverse()}
 function curD(g){var l=ldates(g,8);if(!V.d||V.dg!=g.id){V.d=l.length?l[l.length-1]:td();V.dg=g.id}return V.d}
 function hk(g,d){return D.h[g.id+"|"+d]}
-/* Yakshanba testlari: har yakshanba barcha guruhlarda test olinadi; bayram va h.k. sabab bo'lmasa — "Olinmadi" deb belgilanadi. Hisob TSTART sanasidan boshlanadi */
+/* Yakshanba testlari: har yakshanba barcha guruhlarda test olinadi; bayram va h.k. sabab bo'lmasa — "Olinmadi" deb belgilanadi. Hisob TSTART sanasidan boshlanadi. Yakshanbadan keyingi 6 kun ichida kiritilgan test ham shu yakshanba uchun hisoblanadi */
 var TSTART="2026-11-15";
 function suns(g,n){var o=[],d=new Date();d.setHours(12,0,0,0);while(d.getDay()!=0)d.setDate(d.getDate()-1);for(var c=0;o.length<n&&c<80;c++){var s=dstr(d);if(s<TSTART)break;if(s>=gst(g)+"-01")o.push(s);d.setDate(d.getDate()-7)}return o}
 function tsk(g,d){return D.h[g.id+"|"+d+"|t"]}
-function thas(g,d){return D.t.some(function(t){return t.g==g.id&&t.d==d})}
+function thas(g,d){var e=new Date(d+"T12:00:00");e.setDate(e.getDate()+6);var f=dstr(e);return D.t.some(function(t){return t.g==g.id&&t.d>=d&&t.d<=f})}
 function tPend(g){var l=suns(g,1);return l.length&&!thas(g,l[0])&&!tsk(g,l[0])?l[0]:""}
-function tSk(d){var g=GR(),k=g.id+"|"+d+"|t";if(D.h[k])delete D.h[k];else{if(thas(g,d)){alert("Bu kunga test kiritilgan");return}D.h[k]=1}sv(g.id);R()}
+function tSk(d){var g=GR(),k=g.id+"|"+d+"|t";if(D.h[k])delete D.h[k];else{if(thas(g,d)){alert("Bu haftaga test kiritilgan");return}D.h[k]=1}sv(g.id);R()}
 function pT(d){V.tn="Haftalik test "+fd(d);V.td=d;R();var e=$("nt");if(e)e.scrollIntoView({behavior:"smooth"})}
 function addG(){var n=$("gn").value.trim();if(!n)return;var id=uid(),dv=$("gd").value;D.g.push({id:id,n:n,pr:+$("gp").value||0,tm:$("gt").value.trim(),st:$("gm").value||cm(),dy:dv?dv.split(",").map(Number):[],t:$("gtl").value.trim().toLowerCase().replace(/@.*$/,"")});sv(id);R()}
 function gS(v){var g=GR();g.st=v;sv(g.id)}
