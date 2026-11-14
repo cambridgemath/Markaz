@@ -37,7 +37,7 @@ input,select,textarea{background:var(--card);border:1px solid var(--bd);border-r
 .sv{position:sticky;bottom:8px;margin-top:10px}
 .ph{width:84px;height:84px;border-radius:50%;object-fit:cover;background:var(--bd);display:flex;align-items:center;justify-content:center;font-size:36px;flex:none}
 img.ph{cursor:zoom-in}
-.zm{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.9);z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;cursor:zoom-out}
+.zm{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.92);z-index:9999;display:none;align-items:center;justify-content:center;padding:16px;cursor:zoom-out}
 .zm img{max-width:100%;max-height:100%;border-radius:12px;object-fit:contain}
 .zm span{position:absolute;top:16px;right:20px;color:#fff;font-size:30px}
 a{color:var(--pr)}
@@ -49,6 +49,7 @@ label{font-size:13px;color:var(--mu);display:block;margin-top:8px}
 <div id="login" style="display:none"><h1>📒 Matematika markazi</h1><div class="c"><div class="r"><input id="lu" placeholder="Login" autocapitalize="none" autocomplete="username"></div><div class="r"><input id="lp" type="password" placeholder="Parol" autocomplete="current-password"></div><div class="r"><button class="b on" onclick="doLogin()">Kirish</button></div><div id="le" class="bad" style="margin-top:8px"></div></div></div>
 <div id="main" style="display:none"><div class="sp" style="margin-bottom:6px"><span class="mu">👤 <b id="who"></b></span><button class="b" onclick="doOut()">Chiqish</button></div><div id="app"></div></div>
 </div>
+<div id="zm" class="zm" onclick="zm(0)"></div>
 <script>
 var ADM="cambridgemathematicscentre",API="https://markaz-bot.cambridgemathematicscentre.workers.dev";
 var MN=["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"],DN={1:"Du",2:"Se",3:"Chor",4:"Pay",5:"Ju",6:"Sha",0:"Yak"},DO=[1,2,3,4,5,6,0];
@@ -58,7 +59,7 @@ function dstr(d){return new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOStr
 function td(){return dstr(new Date())}
 function cm(){return td().slice(0,7)}
 function fd(d){return +d.slice(8)+"-"+MN[+d.slice(5,7)-1]}
-var V={v:"h",g:"",s:"",tab:"a",d:"",dg:"",o:0,sg:0,z:0,m:cm(),x:"",dr:{},ph:{},tn:"",td:""};
+var V={v:"h",g:"",s:"",tab:"a",d:"",dg:"",o:0,sg:0,m:cm(),x:"",dr:{},ph:{},tn:"",td:""};
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
 function esc(t){return String(t==null?"":t).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
 function fm(n){return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g," ")}
@@ -67,7 +68,8 @@ function me(){return String(window.ME||"").toLowerCase()}
 function isA(){return me()==ADM}
 function vis(g){return isA()||(!!g.t&&String(g.t).toLowerCase()==me())}
 function VG(){return D.g.filter(function(g){return vis(g)&&!g.ar})}
-function pl(s){var a=[];if(s.ph)a.push("Ota: "+esc(s.ph));if(s.ph2)a.push("Ona: "+esc(s.ph2));return a.length?a.join(" · "):"Telefon kiritilmagan"}
+function nb(){return "<span class='bad'>bermadi</span>"}
+function pl(s){var a=[];if(s.ph)a.push("Ota: "+esc(s.ph));if(s.ph2)a.push("Ona: "+esc(s.ph2));return a.length?a.join(" · "):"Telefon: "+nb()}
 function mg(c,L,gs){
  c.g=c.g||[];c.s=c.s||[];c.a=c.a||{};c.p=c.p||{};c.t=c.t||[];c.h=c.h||{};
  var ids={},inG=function(x){return gs.indexOf(x)>=0};
@@ -84,8 +86,8 @@ function rr(){var a=document.activeElement;if(a&&(a.tagName=="INPUT"||a.tagName=
 window.setD=function(j){try{D=Object.assign(ne(),JSON.parse(j))}catch(e){return}rr()};window.setSave=function(f){ref={set:f}};
 function chk(){return !Object.keys(V.dr).length||confirm("Saqlanmagan oʻzgarishlar yoʻqoladi. Davom etasizmi?")}
 function S(k,v){V[k]=v;V.x="";R()}
-function zm(v){V.z=v;R()}
-function go(v,g,s){if(!chk())return;V.dr={};V.z=0;V.v=v;if(v=="g")V.dg="";if(g)V.g=g;if(s)V.s=s;V.x="";R()}
+function zm(v){var e=$("zm");if(!e)return;if(v){var u=V.ph[V.s];if(!u)return;e.innerHTML="<span>✕</span><img src='"+u+"'>";e.style.display="flex"}else{e.style.display="none";e.innerHTML=""}}
+function go(v,g,s){if(!chk())return;V.dr={};zm(0);V.v=v;if(v=="g")V.dg="";if(g)V.g=g;if(s)V.s=s;V.x="";R()}
 function chD(v){if(!chk())return;V.d=v;V.dg=V.g;V.dr={};R()}
 function GR(){return D.g.find(function(x){return x.id==V.g})||{}}
 function ST(g){return D.s.filter(function(x){return x.g==g&&!x.ar})}
@@ -203,16 +205,15 @@ function R(){
   var s=D.s.find(function(x){return x.id==V.s})||{},g=gof(s),ts=D.t.filter(function(t){return t.sc[s.id]!=null}),av=ts.length?Math.round(ts.reduce(function(a,t){return a+t.sc[s.id]/t.mx*100},0)/ts.length):null,ma=mAtt(s.id,V.m),dk2=Object.keys(D.a).filter(function(k){return D.a[k][s.id]!=null}).sort(function(a,b){return a.split("|")[1]<b.split("|")[1]?1:-1}).slice(0,8),hs=hist(s);
   if(V.ph[s.id]===undefined){V.ph[s.id]=null;if(window.getPhoto)window.getPhoto(s.id).then(function(u){V.ph[s.id]=u||"";R()})}
   var pu=V.ph[s.id],pm=mrange(sst(s),cm()).reverse(),dbt=debt(s),fo=pm.filter(function(m){return free(s,m)}),dv=String(dc(s));
-  function tl(p){return p?"<a href='tel:"+esc(p)+"'>"+esc(p)+"</a>":"—"}
+  function tl(p){return p?"<a href='tel:"+esc(p)+"'>"+esc(p)+"</a>":nb()}
   var dop=[["0","Yoʻq"],["50","50% — boquvchisi yoʻq / kam taʼminlangan"],["100","100% — toʻliq bepul"]];if(["0","50","100"].indexOf(dv)<0)dop.push([dv,dv+"%"]);
   var og=D.g.filter(function(x){return x.id!=s.g&&!x.ar}).map(function(x){return "<option value='"+x.id+"'>"+esc(x.n)+" — "+fm(x.pr)+" soʻm</option>"}).join("");
-  h="<button class='b' onclick=\"go('g','"+s.g+"')\">‹ "+esc(g.n||"Guruh")+"</button><div class='c sp' style='margin-top:10px;justify-content:flex-start;gap:14px'>"+(pu?"<img class='ph' src='"+pu+"' onclick='zm(1)'>":"<div class='ph'>👤</div>")+"<div><h2 style='margin:0'>"+esc(s.n)+(s.ar?" 📦":"")+"</h2><div class='mu'>Ota: "+tl(s.ph)+"</div><div class='mu'>Ona: "+tl(s.ph2)+"</div>"+(s.bd?"<div class='mu'>Tugʻilgan: "+esc(s.bd)+"</div>":"")+(dc(s)?"<div class='ok'>⭐ Chegirma: "+dc(s)+"%</div>":"")+(hs.length>1?"<div class='mu'>Guruhlar: "+hs.map(function(x){return esc(gby(x.g).n||"?")+(x.f!="0000-00"?" ("+x.f+" dan)":"")}).join(" → ")+"</div>":"")+"</div></div>"+
+  h="<button class='b' onclick=\"go('g','"+s.g+"')\">‹ "+esc(g.n||"Guruh")+"</button><div class='c sp' style='margin-top:10px;justify-content:flex-start;gap:14px'>"+(pu?"<img class='ph' src='"+pu+"' onclick='zm(1)'>":"<div class='ph'>👤</div>")+"<div><h2 style='margin:0'>"+esc(s.n)+(s.ar?" 📦":"")+"</h2>"+(s.ph?"<div class='mu'>Ota: "+tl(s.ph)+"</div>":"")+(s.ph2?"<div class='mu'>Ona: "+tl(s.ph2)+"</div>":"")+(!s.ph&&!s.ph2?"<div class='mu'>Telefon: "+nb()+"</div>":"")+(s.bd?"<div class='mu'>Tugʻilgan: "+esc(s.bd)+"</div>":"")+(dc(s)?"<div class='ok'>⭐ Chegirma: "+dc(s)+"%</div>":"")+(pu?"<div class='mu'>🔍 Rasmni bossangiz kattalashadi</div>":"")+(hs.length>1?"<div class='mu'>Guruhlar: "+hs.map(function(x){return esc(gby(x.g).n||"?")+(x.f!="0000-00"?" ("+x.f+" dan)":"")}).join(" → ")+"</div>":"")+"</div></div>"+
   "<div class='c'><b>✏️ Maʼlumotlar</b><label>Ism familiya</label><input value='"+esc(s.n)+"' onchange=\"eS('n',this.value)\"><label>Ota telefoni</label><input type='tel' value='"+esc(s.ph)+"' onchange=\"eS('ph',this.value)\"><label>Ona telefoni</label><input type='tel' value='"+esc(s.ph2)+"' onchange=\"eS('ph2',this.value)\"><label>Tugʻilgan sana</label><input type='date' value='"+esc(s.bd)+"' onchange=\"eS('bd',this.value)\"><label>Guruhga qoʻshilgan oy</label><input type='month' value='"+sst(s)+"' onchange=\"eS('j',this.value)\">"+(A?"<label>Chegirma</label><select onchange=\"eS('dc',this.value)\">"+dop.map(function(o){return "<option value='"+o[0]+"'"+(o[0]==dv?" selected":"")+">"+o[1]+"</option>"}).join("")+"</select>":"")+"<label>Rasm</label><input type='file' accept='image/*' onchange='upPh(this)'></div>"+
   (A&&og?"<div class='c'><b>🔄 Boshqa guruhga oʻtkazish</b><div class='mu'>Hozir: "+esc(g.n||"—")+"</div><label>Yangi guruh</label><select id='mg'>"+og+"</select><label>Qaysi oydan boshlab</label><input id='mm' type='month' value='"+cm()+"'><div class='mu' style='margin-top:6px'>Shu oydan yangi guruh narxi hisoblanadi. Oldingi oylar eski narxda qoladi, davomat va testlar saqlanadi.</div><div class='r'><button class='b on' onclick='mvS()'>Oʻtkazish</button></div></div>":"")+
   "<div class='c'><b>📊 Testlar</b> <span class='mu'>oʻrtacha: "+(av==null?"—":av+"%")+"</span>"+(ts.map(function(t){var p=Math.round(t.sc[s.id]/t.mx*100);return "<div style='margin-top:8px'><div class='sp'><span>"+esc(t.t)+" <span class='mu'>"+(t.k=="o"?"oylik · ":"")+t.d+"</span></span><b>"+t.sc[s.id]+"/"+t.mx+"</b></div><div class='bar'><i style='width:"+Math.min(p,100)+"%'></i></div></div>"}).join("")||"<div class='mu'>Natija yoʻq</div>")+"</div>"+
   "<div class='c'><b>📅 Davomat</b> <span class='mu'>"+V.m+": "+ma[0]+" / "+ma[1]+" dars</span><div style='margin-top:6px'>"+(dk2.map(function(k){return "<span class='"+(D.a[k][s.id]?"ok":"bad")+"' style='margin-right:10px'>"+k.split("|")[1].slice(5)+(D.a[k][s.id]?" ✔":" ✘")+"</span>"}).join("")||"<span class='mu'>Maʼlumot yoʻq</span>")+"</div></div>"+
   "<div class='c'><b>💰 Toʻlovlar</b> <span class='"+(dbt>0?"bad":"ok")+"'>"+(dbt>0?"jami qarz "+fm(dbt):"qarz yoʻq")+"</span>"+(fo.length?"<div class='ok' style='margin-top:4px'>🎓 Bepul oylar (100% test): "+fo.join(", ")+"</div>":"")+pm.map(function(m){var p=D.p[s.id+"|"+m]||0,d=due(s,m),q=Math.max(0,d-p);return "<div class='sp' style='margin-top:6px'><span>"+m+(hs.length>1?" <span class='mu'>"+esc(gby(gid(s,m)).n||"")+"</span>":"")+"</span><span class='"+(q>0?"bad":"ok")+"'>"+(free(s,m)?"🎓 bepul":fm(p)+" "+(q>0?"(qarz "+fm(q)+")":(d==0?"🎓":"✔")))+"</span></div>"}).join("")+"</div>";
-  if(V.z&&pu)h+="<div class='zm' onclick='zm(0)'><span>✕</span><img src='"+pu+"'></div>";
  }
  $("app").innerHTML=h;
 }
@@ -239,4 +240,4 @@ onAuthStateChanged(auth,u=>{if(un){un();un=null}
 });
 </script>
 </body>
- </html>
+</html>
