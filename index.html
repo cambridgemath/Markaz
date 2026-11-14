@@ -97,16 +97,16 @@ function ldates(g,n){var o=[],dy=g.dy||[];if(!dy.length)return o;var d=new Date(
 function curD(g){var l=ldates(g,8);if(!V.d||V.dg!=g.id){V.d=l.length?l[l.length-1]:td();V.dg=g.id}return V.d}
 function hk(g,d){return D.h[g.id+"|"+d]}
 function addG(){var n=$("gn").value.trim();if(!n)return;var id=uid(),dv=$("gd").value;D.g.push({id:id,n:n,pr:+$("gp").value||0,tm:$("gt").value.trim(),st:$("gm").value||cm(),dy:dv?dv.split(",").map(Number):[],t:$("gtl").value.trim().toLowerCase().replace(/@.*$/,"")});sv(id);R()}
-function gS(v){var g=GR();g.st=v;sv(g.id);R()}
+function gS(v){var g=GR();g.st=v;sv(g.id)}
 function gDay(n){var g=GR();g.dy=g.dy||[];var i=g.dy.indexOf(n);if(i<0)g.dy.push(n);else g.dy.splice(i,1);sv(g.id);V.dg="";R()}
 function gPre(n){var g=GR();g.dy=n==1?[1,3,5]:[2,4,6];sv(g.id);V.dg="";R()}
-function gT(v){var g=GR();g.t=v.trim().toLowerCase().replace(/@.*$/,"");sv(g.id);R()}
-function gE(f,v){var g=GR();g[f]=f=="pr"?+v||0:v.trim();sv(g.id);R()}
+function gT(v){var g=GR();g.t=v.trim().toLowerCase().replace(/@.*$/,"");sv(g.id)}
+function gE(f,v){var g=GR();g[f]=f=="pr"?+v||0:v.trim();sv(g.id)}
 function gAr(){var g=GR();if(V.x!="ga"){V.x="ga";R();return}g.ar=td();V.x="";sv(g.id);V.v="h";R()}
 function gRe(i){var g=D.g.find(function(x){return x.id==i});delete g.ar;sv(i);R()}
 function gDel(i){if(V.x!="gd"+i){V.x="gd"+i;R();return}D.g=D.g.filter(function(x){return x.id!=i});D.s=D.s.filter(function(x){return x.g!=i});D.t=D.t.filter(function(x){return x.g!=i});Object.keys(D.a).forEach(function(k){if(k.indexOf(i+"|")==0)delete D.a[k]});Object.keys(D.h).forEach(function(k){if(k.indexOf(i+"|")==0)delete D.h[k]});V.x="";sv(i);R()}
 function addS(){var n=$("sn").value.trim();if(!n)return;D.s.push({id:uid(),n:n,g:V.g,ph:$("sp").value.trim(),ph2:$("sq").value.trim(),j:$("sj").value||cm(),dc:+$("sd").value||0});sv(V.g);R()}
-function eS(f,v){var s=D.s.find(function(x){return x.id==V.s});s[f]=v.trim();sv(s.g);R()}
+function eS(f,v){var s=D.s.find(function(x){return x.id==V.s});s[f]=v.trim();sv(s.g)}
 function arS(i){if(V.x!=i){V.x=i;R();return}var s=D.s.find(function(x){return x.id==i});s.ar=td();V.x="";sv(s.g);R()}
 function reS(i){var s=D.s.find(function(x){return x.id==i});delete s.ar;sv(s.g);R()}
 function delS(i){if(V.x!="d"+i){V.x="d"+i;R();return}var s=D.s.find(function(x){return x.id==i}),g=s.g;D.s=D.s.filter(function(x){return x.id!=i});V.x="";sv(g);R()}
@@ -117,7 +117,7 @@ function all(){var a=cur();ST(V.g).forEach(function(s){if(a[s.id]==null)V.dr[s.i
 function clr(){ST(V.g).forEach(function(s){V.dr[s.id]=null});R()}
 function saveA(){var a=cur();if(Object.keys(a).length)D.a[dk()]=a;else delete D.a[dk()];V.dr={};sv(V.g);R()}
 function hol(){if(!chk())return;V.dr={};var g=GR(),k=g.id+"|"+V.d;if(D.h[k]){delete D.h[k]}else{if(D.a[k]&&!confirm("Bu kunning davomati oʻchadi. Davom etasizmi?"))return;delete D.a[k];D.h[k]=1}sv(g.id);R()}
-function pay(i,v){var s=D.s.find(function(x){return x.id==i});D.p[i+"|"+V.m]=+v||0;sv(s?s.g:V.g);R()}
+function pay(i,v){var s=D.s.find(function(x){return x.id==i});D.p[i+"|"+V.m]=+v||0;sv(s?s.g:V.g)}
 function addT(){var t=$("tt").value.trim();if(!t)return;D.t.push({id:uid(),g:V.g,t:t,k:$("tk").value,mx:+$("tm").value||100,d:$("tdt").value||td(),sc:{}});sv(V.g);R()}
 function sc(t,i,v){var x=D.t.find(function(q){return q.id==t});if(v==="")delete x.sc[i];else x.sc[i]=+v;sv(x.g)}
 function mAtt(g,sid,m){var c=0,t=0;for(var k in D.a){if(k.indexOf(g+"|"+m)==0&&D.a[k][sid]!=null){t++;if(D.a[k][sid])c++}}return[c,t]}
