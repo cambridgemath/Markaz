@@ -327,7 +327,7 @@ onAuthStateChanged(auth,u=>{if(un){un();un=null}
 });
 </script>
 <script>
-/* Tezkor toʻlov qabul qilish: bosh sahifadagi qidiruvdan 💵 + tugmasi */
+/* Bosh sahifa qidiruvi: 💵 + toʻlov, ⚡ tezkor davomat va test ball */
 (function(){
 function qs(){return D.s.find(function(x){return x.id==V.qp})}
 function rem(s,m){return Math.max(0,due(s,m)-(D.p[s.id+"|"+m]||0))}
@@ -349,15 +349,9 @@ function qpShow(){
  var opts=ms.map(function(m){var r=rem(s,m);return "<option value='"+m+"'"+(m==def?" selected":"")+">"+m+(r>0?" — qarz "+fm(r):" ✔ toʻlangan")+"</option>"}).join("");
  card.insertAdjacentHTML("afterend","<div class='c' id='qp' style='border-color:var(--pr)'><div class='sp'><b>💵 Toʻlov qabul qilish</b><button class='b' onclick='qpClose()'>✕</button></div><div style='margin-top:6px'><b>"+esc(s.n)+"</b> <span class='mu'>📌 "+esc(gof(s).n||"")+"</span></div><div class='mu'>Jami qarz: <b class='"+(dbt>0?"bad":"ok")+"'>"+fm(dbt)+"</b> soʻm"+(dc(s)?" · ⭐ chegirma "+dc(s)+"%":"")+"</div><label>Qaysi oy uchun</label><select id='qm'>"+opts+"</select><label>Summa (soʻm)</label><input id='qa' type='number' inputmode='numeric' placeholder='masalan: 200000'><div class='r'><button class='b on' onclick='qpAdd(0)'>＋ Qoʻshish</button><button class='b' onclick='qpAdd(1)'>Oy qarzini toʻliq yopish</button></div></div>")
 }
-var oR=R;
-R=function(){if(V.v!="h")V.qp="";oR();if(V.v=="h"&&V.qp)qpShow()};
-srHtml=function(){var q=nz(V.q);if(!q)return "";var dg=q.replace(/\D/g,""),ws=q.split(" ");
- var r=D.s.filter(function(s){if(!vs(s))return false;var n=nz(s.n);if(ws.every(function(w){return n.indexOf(w)>=0}))return true;return dg.length>=3&&[s.ph,s.ph2].some(function(p){return String(p||"").replace(/\D/g,"").indexOf(dg)>=0})});
- if(!r.length)return "<div class='mu' style='margin-top:8px'>Hech kim topilmadi</div>";
- return r.slice(0,30).map(function(s){
-  var gs=[s.g].concat(EG(s)).map(function(x){return esc(gby(x).n||"")}).filter(Boolean),pv=!s.ar&&vis(gof(s)),d=pv?debt(s):0;
-  return "<div class='c sp' style='margin-top:8px;margin-bottom:0'><div><button class='nm' onclick=\"go('u','"+s.g+"','"+s.id+"')\">"+esc(s.n)+(s.ar?" 📦":"")+"</button><div class='mu'>"+(gs.length?"📌 "+gs[0]+(gs.length>1?" · ➕ "+gs.slice(1).join(", "):""):"Guruh yoʻq")+"</div>"+(d>0?"<div class='bad' style='font-size:14px'>Qarz: "+fm(d)+" soʻm</div>":"")+"</div><div class='r' style='margin:0'>"+(pv?"<button class='b on' onclick=\"qpOpen('"+s.id+"')\">💵 +</button>":"")+"<button class='b' onclick=\"go('u','"+s.g+"','"+s.id+"')\">Kabinet ›</button></div></div>"}).join("")+(r.length>30?"<div class='mu' style='margin-top:6px'>Yana "+(r.length-30)+" ta bor, aniqroq yozing</div>":"")};
-})();
-</script>
-</body>
-</html>
+/* Tezkor davomat va test */
+function qkd(g){var l=ldates(g,8).slice();suns(g,3).forEach(function(d){if(l.indexOf(d)<0)l.push(d)});l.sort();return l}
+window.qkT=function(id){V.qk=V.qk==id?"":id;srch(V.q)};
+window.qkD=function(gi,v){V.qdd=V.qdd||{};V.qdd[gi]=v;srch(V.q)};
+window.qkA=function(gi,si,v){var sel=$("qd_"+gi),d=sel&&sel.value;if(!d)return;var k=gi+"|"+d,a=D.a[k]=D.a[k]||{};if(a[si]===v)delete a[si];else a[si]=v;if(!Object.keys(a).length)delete D.a[k];V.qdd=V.qdd||{};V.qdd[gi]=d;sv(gi);srch(V.q);toast("✅ Davomat saqlandi")};
+window.qkS=function(ti,si,v){v
