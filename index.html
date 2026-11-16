@@ -381,7 +381,7 @@ srHtml=function(){var q=nz(V.q);if(!q)return "";var dg=q.replace(/\D/g,""),ws=q.
 })();
 </script>
 <script>
-/* Hisobot va PDF: guruh hisoboti, test natijasi PDF (rasmli PDF, ʻ belgisi muammosiz) */
+/* Hisobot va PDF: natija sayt ichida ochiladi (ulashish, yuklab olish yoki rasmni saqlash) */
 (function(){
 function pc(a,b){return b?Math.round(a/b*100):null}
 function rpRows(g){var ss=STX(g.id),tt=D.t.filter(function(t){return t.g==g.id&&t.d.slice(0,7)==V.m});
@@ -393,7 +393,6 @@ window.rpHtml=function(g){var r=rpRows(g),m=rpSum(r),PV=vis(g);
  r.sort(function(a,b){return a.s.n<b.s.n?-1:1});
  return "<input type='month' value='"+V.m+"' onchange=\"S('m',this.value)\"><div class='c' style='margin-top:8px'><b>📊 Guruh hisoboti — "+V.m+"</b><div style='margin-top:6px'>📅 Oʻrtacha davomat: <b>"+(m.ap==null?"—":m.ap+"%")+"</b></div><div>📝 Oʻrtacha test: <b>"+(m.sc==null?"—":m.sc+"%")+"</b></div>"+(PV?"<div>💰 Qarzdorlar: <b class='bad'>"+m.dn+"</b> kishi · <b class='bad'>"+fm(m.ds)+"</b> soʻm</div>":"")+"<div class='r wr' style='margin-top:10px'><button class='b on' onclick='pdfR()'>📄 PDF ulashish</button></div></div>"+
  r.map(function(x){return "<div class='c'><div class='sp'><button class='nm' onclick=\"go('u','','"+x.s.id+"')\">"+esc(x.s.n)+(x.x?" ➕":"")+"</button>"+(PV&&x.db>0?"<span class='bad'>"+fm(x.db)+"</span>":"")+"</div><div class='mu'>📅 "+(x.ap==null?"—":x.ac+"/"+x.at+" ("+x.ap+"%)")+" · 📝 "+(x.sc==null?"—":x.sc+"%")+"</div></div>"}).join("")||"<div class='c mu'>Oʻquvchi yoʻq</div>"};
-/* canvas jadval -> sahifalar */
 function pages(o){var W=1240,H=1754,M=70,rh=54,out=[],cv,cx,y,pn=0,tw=W-2*M,cw=o.cols.map(function(c){return c.w*tw});
  function fit(t,w){t=String(t);if(cx.measureText(t).width<=w)return t;while(t.length>1&&cx.measureText(t+"…").width>w)t=t.slice(0,-1);return t+"…"}
  function np(first){cv=document.createElement("canvas");cv.width=W;cv.height=H;cx=cv.getContext("2d");cx.fillStyle="#fff";cx.fillRect(0,0,W,H);pn++;y=M;
@@ -422,9 +421,23 @@ function mkPdf(cvs){var ch=[],off=[],len=0;function put(x){var a=typeof x=="stri
   ob(p+2,function(){put("<</Type/XObject/Subtype/Image/Width "+c.width+"/Height "+c.height+"/ColorSpace/DeviceRGB/BitsPerComponent 8/Filter/DCTDecode/Length "+j.length+">>\nstream\n");put(j);put("\nendstream")})});
  var xr=len,t=2+n*3+1;put("xref\n0 "+t+"\n0000000000 65535 f \n");for(var k=1;k<t;k++)put(("0000000000"+off[k]).slice(-10)+" 00000 n \n");
  put("trailer\n<</Size "+t+"/Root 1 0 R>>\nstartxref\n"+xr+"\n%%EOF");return new Blob(ch,{type:"application/pdf"})}
-async function out(o,name){try{var blob=mkPdf(pages(o)),f=new File([blob],name,{type:"application/pdf"});
- if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:o.title});return}catch(e){if(e&&e.name=="AbortError")return}}
- var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();toast("📄 PDF yuklab olindi")}catch(e){alert("PDF yaratib boʻlmadi: "+(e.message||e))}}
+/* Natija sayt ichida ochiladi */
+window.pvClose=function(){var e=document.getElementById("pv");if(e)e.style.display="none"};
+window.pvShare=async function(){var p=window._pv;if(!p)return;
+ try{var pf=new File([p.blob],p.name,{type:"application/pdf"});
+  if(navigator.canShare&&navigator.canShare({files:[pf]})){await navigator.share({files:[pf],title:p.title});return}
+  var fs=await Promise.all(p.imgs.map(function(u,i){return fetch(u).then(function(r){return r.blob()}).then(function(b){return new File([b],p.name.replace(".pdf","")+"_"+(i+1)+".jpg",{type:"image/jpeg"})})}));
+  if(navigator.canShare&&navigator.canShare({files:fs})){await navigator.share({files:fs,title:p.title});return}
+  alert("Bu brauzerda ulashish ishlamaydi. Rasmni bosib turing va «Saqlash» yoki «Ulashish» ni tanlang, yoki skrinshot oling.")
+ }catch(e){if(e&&e.name=="AbortError")return;alert("Ulashib boʻlmadi. Rasmni bosib turing va saqlang.")}};
+function out(o,name){try{var cvs=pages(o),urls=cvs.map(function(c){return c.toDataURL("image/jpeg",.92)}),blob=mkPdf(cvs);
+ window._pv={name:name,title:o.title,blob:blob,imgs:urls};
+ if(window._pvu)URL.revokeObjectURL(window._pvu);window._pvu=URL.createObjectURL(blob);
+ var e=document.getElementById("pv");
+ if(!e){e=document.createElement("div");e.id="pv";e.style.cssText="position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);color:var(--tx);z-index:10000;overflow:auto;padding:12px";document.body.appendChild(e)}
+ e.innerHTML="<div class='sp'><b>"+esc(o.title)+"</b><button class='b' onclick='pvClose()'>✕ Yopish</button></div><div class='r wr'><button class='b on' onclick='pvShare()'>📤 Ulashish</button><a class='b' href='"+window._pvu+"' download='"+name+"' style='text-decoration:none;color:var(--tx)'>⬇ PDF yuklab olish</a></div><div class='mu' style='margin:8px 0 12px'>Ulashish ishlamasa: rasmni bosib turing va «Saqlash» ni tanlang, yoki skrinshot oling.</div>"+urls.map(function(u){return "<img src='"+u+"' style='width:100%;display:block;border:1px solid var(--bd);border-radius:8px;margin-bottom:12px;background:#fff'>"}).join("")+"<button class='b' style='width:100%;padding:12px;margin-bottom:20px' onclick='pvClose()'>✕ Yopish</button>";
+ e.style.display="block";e.scrollTop=0
+ }catch(err){alert("Natijani yaratib boʻlmadi: "+(err.message||err))}}
 function fn(s){return String(s).replace(/[^\w\-]+/g,"_")}
 window.pdfT=function(id){var t=D.t.find(function(q){return q.id==id}),g=GR();if(!t)return;if(Object.keys(V.sd[id]||{}).length){alert("Avval ballarni saqlang");return}
  var ss=STX(g.id),pr=[],ab2=[];ss.forEach(function(s){if(ab(t,s))ab2.push(s);else pr.push(s)});
