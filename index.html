@@ -483,5 +483,22 @@ window.autoBk=async function(){if(run||!isA()||!D.s.length)return;run=1;
   V.bl=await window.bkList();if(V.v=="h")R()}catch(e){}};
 })();
 </script>
+<script>
+/* Ekran joyini saqlash: qayta chizilganda tepaga sakramaydi, ortga qaytganda oldingi joyiga qaytadi */
+(function(){
+var pos={},lk="";
+function key(){return V.v+"|"+(V.v=="u"?V.s:V.v=="g"?V.g+"|"+V.tab:"")}
+var o=R;
+R=function(){
+ var y=window.pageYOffset||0,k0=key();
+ if(lk)pos[lk]=y;
+ o();
+ var k=key();
+ if(k==lk||(!lk&&y>0)){window.scrollTo(0,y)}
+ else if(V.v=="h"||V.v=="g"){window.scrollTo(0,pos[k]||0)}
+ else{window.scrollTo(0,0)}
+ lk=k};
+})();
+</script>
 </body>
 </html>
