@@ -228,7 +228,7 @@ function sndA(){if(Object.keys(V.dr).length){alert("Avval davomatni saqlang");re
  snd(STX(g.id).filter(function(s){return a[s.id]!=null}).map(function(s){return item(s,am(s,a[s.id],V.d))}))}
 function sndT(id){var t=D.t.find(function(q){return q.id==id}),g=GR();if(Object.keys(V.sd[id]||{}).length){alert("Avval ballarni saqlang");return}
  snd(STX(g.id).filter(function(s){return t.sc[s.id]!=null&&!ab(t,s)}).map(function(s){return item(s,tm(t,s,false))}))}
-function sndQ(){var g=GR(),o=[];ST(g.id).forEach(function(s){var d=debt(s);if(d>0)o.push(item(s,"💰 Cambridge Mathematics Centre\n"+s.n+" uchun jami qarz: "+fm(d)+" soʻm.\nIltimos, toʻlovni amalga oshiring."))});snd(o)}
+function sndQ(){var g=GR(),o=[];ST(g.id).forEach(function(s){var d=debt(s);if(d>0)o.push(item(s,"⚠️ Cambridge Mathematics Centre\n💰 TOʻLOV TALABI\n\n👤 "+s.n+"\nJami qarzdorlik: "+fm(d)+" soʻm.\n\nQarzni eng yaqin kunlarda toʻlashingizni talab qilamiz. Toʻlov allaqachon qilingan boʻlsa, markaz maʼmuriyatiga xabar bering."))});snd(o)}
 function sndN(){var t=$("nw").value.trim();if(!t){alert("Xabar matnini yozing");return}var by={};
  VG().forEach(function(g){ST(g.id).forEach(function(s){var ph=[s.ph,s.ph2].filter(Boolean);if(!ph.length)return;var k=l9(ph[0]),e=by[k]=by[k]||{ph:[],n:[]};ph.forEach(function(p){if(e.ph.map(l9).indexOf(l9(p))<0)e.ph.push(p)});e.n.push(s.n)})});
  snd(Object.keys(by).map(function(k){var e=by[k];return{name:e.n.join(", "),phones:e.ph,text:"📢 Cambridge Mathematics Centre\n👤 "+e.n.join(", ")+"\n\n"+t}}))}
@@ -247,7 +247,7 @@ function R(){
   "<div class='c'><b>📢 Ota-onalarga yangilik</b><div class='r'><textarea id='nw' rows='3' placeholder='Xabar matni...'></textarea></div><div class='r'><button class='b on' onclick='sndN()'>📨 Hammaga yuborish</button></div></div>"+
   "<div class='c'><b>🤖 Telegram bot</b><div class='mu'>@"+BOT+" · ota-ona botga kirib raqamini yuboradi, soʻng davomat, ball va qarzni oʻzi koʻra oladi. Xabarlar faqat siz 📨 tugmasini bosib tasdiqlaganingizda yuboriladi.</div><div class='r wr'><button class='b' onclick='setKey()'>🔑 Bot kaliti</button><button class='b' onclick='statusCheck()'>🔗 Ulanishni tekshirish</button></div>"+bsum+"</div>"+
   (A&&D.g.some(function(g){return g.ar})?"<div class='c'><b>📦 Yopilgan guruhlar</b>"+D.g.filter(function(g){return g.ar}).map(function(g){return "<div class='sp' style='margin-top:8px'><span>"+esc(g.n)+"</span><div class='r' style='margin:0'><button class='b' onclick=\"gRe('"+g.id+"')\">↩ Ochish</button><button class='b' onclick=\"gDel('"+g.id+"')\">"+(V.x=="gd"+g.id?"Aniqmi?":"🗑")+"</button></div></div>"}).join("")+"</div>":"")+
-  (A?"<div class='c'><b>💾 Zaxira nusxa</b><div class='mu'>Haftada bir marta yuklab oling</div><div class='r'><button class='b' onclick='bk()'>⬇ Yuklab olish</button></div></div>":"");
+  (A?"<div class='c'><b>💾 Zaxira nusxa</b><div class='mu'>Haftada bir marta yuklab oling</div><div class='r'><button class='b' onclick='bk()'>⬇ Yuklab olish</button></div></div>":"")+(A&&window.bkCard?window.bkCard():"");
  }
  if(V.v=="g"){
   var g=GR(),ss=STX(g.id),T=[["a","Davomat"],["p","Toʻlov"],["t","Test"],["s","Oʻquvchilar"],["r","Hisobot"]];
@@ -265,7 +265,7 @@ function R(){
    var rows=sm.map(function(s){var ch=V.m>=sst(s),d=ch?due(s,V.m):0,p=D.p[s.id+"|"+V.m]||0,q=ch?Math.max(0,d-p):0,fr=ch&&d==0;tot+=p;if(q>0){dbt+=q;nd++}else if(fr)nf++;else if(ch)np++;
     var o="<div class='c'><div class='sp'><button class='nm' onclick=\"go('u','','"+s.id+"')\">"+esc(s.n)+"</button><span class='"+(!ch||fr?"mu":q>0?"bad":"ok")+"'>"+(!ch?"Hisoblanmaydi":fr?"🎓 Bepul"+(free(s,V.m)?" (100% test)":" (chegirma)"):q>0?"Qarz: "+fm(q):"✔ Toʻlangan")+"</span></div>"+(ch&&!fr&&(dc(s)>0||bp(s,V.m)!=(g.pr||0))?"<div class='mu'>"+(bp(s,V.m)!=(g.pr||0)?"💵 Alohida narx "+fm(bp(s,V.m))+" soʻm. ":"")+(dc(s)>0?"⭐ Chegirma "+dc(s)+"%. ":"")+"Oylik: "+fm(d)+" soʻm</div>":"")+(ch&&!fr?"<div class='r'><input type='number' value='"+(p||"")+"' placeholder='Toʻlangan summa' onchange=\"pay('"+s.id+"',this.value)\"><button class='b' onclick=\"pay('"+s.id+"',"+d+")\">Toʻliq</button></div>":"")+"</div>";
     return shown[s.id]?o:""}).join("");
-   h+="<input type='month' value='"+V.m+"' onchange=\"S('m',this.value)\"><div class='c' style='margin-top:8px'>Yigʻildi: <b class='ok'>"+fm(tot)+"</b> soʻm · Qarz: <b class='bad'>"+fm(dbt)+"</b> soʻm<div class='mu' style='margin-top:4px'>Toʻlagan: "+np+" · Qarzdor: "+nd+" · Bepul: "+nf+"</div></div><div class='r' style='margin:0 0 10px'><button class='b' onclick='sndQ()'>📨 Qarzdorlarga eslatma</button></div>"+gnone(fp)+rows;}
+   h+="<input type='month' value='"+V.m+"' onchange=\"S('m',this.value)\"><div class='c' style='margin-top:8px'>Yigʻildi: <b class='ok'>"+fm(tot)+"</b> soʻm · Qarz: <b class='bad'>"+fm(dbt)+"</b> soʻm<div class='mu' style='margin-top:4px'>Toʻlagan: "+np+" · Qarzdor: "+nd+" · Bepul: "+nf+"</div></div><div class='r' style='margin:0 0 10px'><button class='b' onclick='sndQ()'>📨 Qarzdorlarga talab yuborish</button></div>"+gnone(fp)+rows;}
   if(V.tab=="t"){
    var ft=gf(ss);
    h+="<div class='c'><b>📆 Yakshanba testlari</b><div class='mu'>Har yakshanba test olinadi. Bayram yoki boshqa sabab boʻlsa — «Olinmadi» deb belgilang.</div>"+(suns(g,6).map(function(d){var has=thas(g,d),sk=tsk(g,d);return "<div class='sp' style='margin-top:8px'><b>"+fd(d)+"</b>"+(has?"<span class='ok'>✔ Olingan</span>":sk?"<div class='r' style='margin:0;align-items:center'><span class='bad'>🚫 Olinmadi</span><button class='b' onclick=\"tSk('"+d+"')\">↩</button></div>":"<div class='r' style='margin:0;align-items:center'><span class='mu'>⏳</span><button class='b on' onclick=\"pT('"+d+"')\">＋ Test</button><button class='b' onclick=\"tSk('"+d+"')\">🚫 Olinmadi</button></div>")+"</div>"}).join("")||"<div class='mu' style='margin-top:8px'>Birinchi yakshanba testi: "+fd(TSTART)+"</div>")+"</div>"+
@@ -310,11 +310,15 @@ R();
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {getFirestore,doc,onSnapshot,setDoc,getDoc,runTransaction} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import {getFirestore,doc,onSnapshot,setDoc,getDoc,runTransaction,collection,getDocs,query,orderBy,limit,deleteDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const cfg={apiKey:"AIzaSyBk3XT1hjnUamKLNgeJy2pWkIr8GB6n5kE",authDomain:"cambridge-math.firebaseapp.com",projectId:"cambridge-math",storageBucket:"cambridge-math.firebasestorage.app",messagingSenderId:"441905620908",appId:"1:441905620908:web:0cf78ca6a43f5606463c09"};
 const app=initializeApp(cfg),auth=getAuth(app),fs=getFirestore(app),d=doc(fs,"center","data");
 const $=i=>document.getElementById(i);let un=null;
 window.putPhoto=(id,u)=>setDoc(doc(fs,"photos",id),{d:u});
+window.bkSave=async(l,j)=>{const id=Date.now().toString(36),t=Date.now();await setDoc(doc(fs,"backups",id),{j:j});await setDoc(doc(fs,"bkmeta",id),{t:t,l:l,n:j.length});return id};
+window.bkList=async()=>{const q=query(collection(fs,"bkmeta"),orderBy("t","desc"),limit(40));const r=await getDocs(q);return r.docs.map(x=>{const v=x.data();return{id:x.id,t:v.t,l:v.l,n:v.n}})};
+window.bkGet=async id=>{const r=await getDoc(doc(fs,"backups",id));return r.data().j};
+window.bkDel=async id=>{await deleteDoc(doc(fs,"bkmeta",id));await deleteDoc(doc(fs,"backups",id))};
 window.getPhoto=async id=>{try{const s=await getDoc(doc(fs,"photos",id));return s.exists()?s.data().d:""}catch(e){return ""}};
 window.doLogin=async()=>{$("le").textContent="";try{await signInWithEmailAndPassword(auth,(function(u){return u.indexOf("@")>0?u:u+"@markaz.uz"})($("lu").value.trim().toLowerCase()),$("lp").value)}catch(e){$("le").textContent="Xato: "+(e.code||e.message)}};
 window.doOut=()=>signOut(auth);
@@ -324,7 +328,7 @@ onAuthStateChanged(auth,u=>{if(un){un();un=null}
  $("login").style.display="none";$("main").style.display="block";$("who").textContent=window.ME;
  if(typeof window.setSave!="function"){$("app").innerHTML="<p class='bad'>Dastur kodi toʻliq yuklanmadi, index.html ni qayta joylang.</p>";return}
  window.setSave(mf=>runTransaction(fs,async tx=>{const s=await tx.get(d);let c={};try{c=s.exists()?JSON.parse(s.data().j):{}}catch(e){c={}}const o=mf(c);tx.set(d,{j:JSON.stringify(o)});return o}));
- R();un=onSnapshot(d,s=>{if(s.exists())window.setD(s.data().j);else R()},e=>{$("who").textContent+=" ⚠ "+(e.code||e.message)});
+ R();un=onSnapshot(d,s=>{if(s.exists()){window.setD(s.data().j);if(window.autoBk)window.autoBk()}else R()},e=>{$("who").textContent+=" ⚠ "+(e.code||e.message)});
 });
 </script>
 <script>
@@ -381,7 +385,7 @@ srHtml=function(){var q=nz(V.q);if(!q)return "";var dg=q.replace(/\D/g,""),ws=q.
 })();
 </script>
 <script>
-/* Hisobot va PDF: natija sayt ichida ochiladi (ulashish, yuklab olish yoki rasmni saqlash) */
+/* Hisobot va PDF: guruh hisoboti, test natijasi PDF (rasmli PDF, ʻ belgisi muammosiz) */
 (function(){
 function pc(a,b){return b?Math.round(a/b*100):null}
 function rpRows(g){var ss=STX(g.id),tt=D.t.filter(function(t){return t.g==g.id&&t.d.slice(0,7)==V.m});
@@ -393,6 +397,7 @@ window.rpHtml=function(g){var r=rpRows(g),m=rpSum(r),PV=vis(g);
  r.sort(function(a,b){return a.s.n<b.s.n?-1:1});
  return "<input type='month' value='"+V.m+"' onchange=\"S('m',this.value)\"><div class='c' style='margin-top:8px'><b>📊 Guruh hisoboti — "+V.m+"</b><div style='margin-top:6px'>📅 Oʻrtacha davomat: <b>"+(m.ap==null?"—":m.ap+"%")+"</b></div><div>📝 Oʻrtacha test: <b>"+(m.sc==null?"—":m.sc+"%")+"</b></div>"+(PV?"<div>💰 Qarzdorlar: <b class='bad'>"+m.dn+"</b> kishi · <b class='bad'>"+fm(m.ds)+"</b> soʻm</div>":"")+"<div class='r wr' style='margin-top:10px'><button class='b on' onclick='pdfR()'>📄 PDF ulashish</button></div></div>"+
  r.map(function(x){return "<div class='c'><div class='sp'><button class='nm' onclick=\"go('u','','"+x.s.id+"')\">"+esc(x.s.n)+(x.x?" ➕":"")+"</button>"+(PV&&x.db>0?"<span class='bad'>"+fm(x.db)+"</span>":"")+"</div><div class='mu'>📅 "+(x.ap==null?"—":x.ac+"/"+x.at+" ("+x.ap+"%)")+" · 📝 "+(x.sc==null?"—":x.sc+"%")+"</div></div>"}).join("")||"<div class='c mu'>Oʻquvchi yoʻq</div>"};
+/* canvas jadval -> sahifalar */
 function pages(o){var W=1240,H=1754,M=70,rh=54,out=[],cv,cx,y,pn=0,tw=W-2*M,cw=o.cols.map(function(c){return c.w*tw});
  function fit(t,w){t=String(t);if(cx.measureText(t).width<=w)return t;while(t.length>1&&cx.measureText(t+"…").width>w)t=t.slice(0,-1);return t+"…"}
  function np(first){cv=document.createElement("canvas");cv.width=W;cv.height=H;cx=cv.getContext("2d");cx.fillStyle="#fff";cx.fillRect(0,0,W,H);pn++;y=M;
@@ -421,23 +426,9 @@ function mkPdf(cvs){var ch=[],off=[],len=0;function put(x){var a=typeof x=="stri
   ob(p+2,function(){put("<</Type/XObject/Subtype/Image/Width "+c.width+"/Height "+c.height+"/ColorSpace/DeviceRGB/BitsPerComponent 8/Filter/DCTDecode/Length "+j.length+">>\nstream\n");put(j);put("\nendstream")})});
  var xr=len,t=2+n*3+1;put("xref\n0 "+t+"\n0000000000 65535 f \n");for(var k=1;k<t;k++)put(("0000000000"+off[k]).slice(-10)+" 00000 n \n");
  put("trailer\n<</Size "+t+"/Root 1 0 R>>\nstartxref\n"+xr+"\n%%EOF");return new Blob(ch,{type:"application/pdf"})}
-/* Natija sayt ichida ochiladi */
-window.pvClose=function(){var e=document.getElementById("pv");if(e)e.style.display="none"};
-window.pvShare=async function(){var p=window._pv;if(!p)return;
- try{var pf=new File([p.blob],p.name,{type:"application/pdf"});
-  if(navigator.canShare&&navigator.canShare({files:[pf]})){await navigator.share({files:[pf],title:p.title});return}
-  var fs=await Promise.all(p.imgs.map(function(u,i){return fetch(u).then(function(r){return r.blob()}).then(function(b){return new File([b],p.name.replace(".pdf","")+"_"+(i+1)+".jpg",{type:"image/jpeg"})})}));
-  if(navigator.canShare&&navigator.canShare({files:fs})){await navigator.share({files:fs,title:p.title});return}
-  alert("Bu brauzerda ulashish ishlamaydi. Rasmni bosib turing va «Saqlash» yoki «Ulashish» ni tanlang, yoki skrinshot oling.")
- }catch(e){if(e&&e.name=="AbortError")return;alert("Ulashib boʻlmadi. Rasmni bosib turing va saqlang.")}};
-function out(o,name){try{var cvs=pages(o),urls=cvs.map(function(c){return c.toDataURL("image/jpeg",.92)}),blob=mkPdf(cvs);
- window._pv={name:name,title:o.title,blob:blob,imgs:urls};
- if(window._pvu)URL.revokeObjectURL(window._pvu);window._pvu=URL.createObjectURL(blob);
- var e=document.getElementById("pv");
- if(!e){e=document.createElement("div");e.id="pv";e.style.cssText="position:fixed;top:0;left:0;right:0;bottom:0;background:var(--bg);color:var(--tx);z-index:10000;overflow:auto;padding:12px";document.body.appendChild(e)}
- e.innerHTML="<div class='sp'><b>"+esc(o.title)+"</b><button class='b' onclick='pvClose()'>✕ Yopish</button></div><div class='r wr'><button class='b on' onclick='pvShare()'>📤 Ulashish</button><a class='b' href='"+window._pvu+"' download='"+name+"' style='text-decoration:none;color:var(--tx)'>⬇ PDF yuklab olish</a></div><div class='mu' style='margin:8px 0 12px'>Ulashish ishlamasa: rasmni bosib turing va «Saqlash» ni tanlang, yoki skrinshot oling.</div>"+urls.map(function(u){return "<img src='"+u+"' style='width:100%;display:block;border:1px solid var(--bd);border-radius:8px;margin-bottom:12px;background:#fff'>"}).join("")+"<button class='b' style='width:100%;padding:12px;margin-bottom:20px' onclick='pvClose()'>✕ Yopish</button>";
- e.style.display="block";e.scrollTop=0
- }catch(err){alert("Natijani yaratib boʻlmadi: "+(err.message||err))}}
+async function out(o,name){try{var blob=mkPdf(pages(o)),f=new File([blob],name,{type:"application/pdf"});
+ if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],title:o.title});return}catch(e){if(e&&e.name=="AbortError")return}}
+ var a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();toast("📄 PDF yuklab olindi")}catch(e){alert("PDF yaratib boʻlmadi: "+(e.message||e))}}
 function fn(s){return String(s).replace(/[^\w\-]+/g,"_")}
 window.pdfT=function(id){var t=D.t.find(function(q){return q.id==id}),g=GR();if(!t)return;if(Object.keys(V.sd[id]||{}).length){alert("Avval ballarni saqlang");return}
  var ss=STX(g.id),pr=[],ab2=[];ss.forEach(function(s){if(ab(t,s))ab2.push(s);else pr.push(s)});
@@ -452,6 +443,44 @@ window.pdfR=function(){var g=GR(),r=rpRows(g),m=rpSum(r),PV=vis(g);r.sort(functi
  var rows=r.map(function(x,i){var q=[String(i+1),x.s.n+(x.x?" ➕":""),x.ap==null?["—","#888"]:x.ac+"/"+x.at+" ("+x.ap+"%)",x.sc==null?["—","#888"]:x.sc+"%"];if(PV)q.push(x.db>0?[fm(x.db),"#c0392b"]:["—","#888"]);return q});
  out({title:"Guruh hisoboti: "+g.n,lines:["Oy: "+V.m+(g.t?" · "+g.t:""),"Oʻquvchilar: "+r.length],cols:cols,rows:rows,
   foot:["Oʻrtacha davomat: "+(m.ap==null?"—":m.ap+"%")+" · Oʻrtacha test: "+(m.sc==null?"—":m.sc+"%")].concat(PV?["Qarzdorlar: "+m.dn+" kishi, "+fm(m.ds)+" soʻm"]:[])},"hisobot_"+fn(g.n)+"_"+V.m+".pdf")};
+})();
+</script>
+<script>
+/* Zaxiralar: haftalik avtomatik zaxira (Firebase "backups"), butun bazani yoki bitta guruhni tiklash */
+(function(){
+function dsz(){var j=JSON.stringify(D);try{return new TextEncoder().encode(j).length}catch(e){return j.length}}
+function pad(n){return ("0"+n).slice(-2)}
+function dt(t){var d=new Date(t);return dstr(d)+" "+pad(d.getHours())+":"+pad(d.getMinutes())}
+var run=0;
+window.bkCard=function(){
+ if(V.bl===undefined){V.bl=null;setTimeout(function(){window.bkLoad()},0)}
+ var n=dsz(),k=Math.round(n/1024),pc=Math.round(n/1048576*100),
+ h="<div class='c'><b>🗂 Zaxiralar</b><div class='mu' style='margin-top:4px'>Baza hajmi: <b class='"+(pc>=80?"bad":"ok")+"'>"+k+" KB</b> / 1024 KB ("+pc+"%)"+(pc>=80?" — baza toʻlib borayapti, menga ayting":"")+"</div><div class='mu' style='margin-top:4px'>Admin saytga kirganda, oxirgi zaxiraga 7 kundan oshgan boʻlsa, avtomatik yangi zaxira olinadi (oxirgi 8 tasi saqlanadi). Rasmlar zaxiraga kirmaydi.</div><div class='r wr'><button class='b on' onclick='bkNow()'>💾 Hozir zaxira olish</button><button class='b' onclick='bkLoad()'>🔄 Roʻyxat</button></div>";
+ if(V.bl===null)h+="<div class='mu' style='margin-top:8px'>Yuklanmoqda…</div>";
+ else if(V.bl===false)h+="<div class='bad' style='margin-top:8px'>Zaxiralar oʻqilmadi. Firebase qoidalarida «backups» va «bkmeta» ruxsati kerak.</div>";
+ else if(!V.bl.length)h+="<div class='mu' style='margin-top:8px'>Hali zaxira yoʻq</div>";
+ else h+=V.bl.slice(0,12).map(function(x){return "<div class='sp' style='margin-top:8px'><span>"+dt(x.t)+" <span class='mu'>"+esc(x.l)+" · "+Math.round(x.n/1024)+" KB</span></span><button class='b"+(V.bo&&V.bo.id==x.id?" on":"")+"' onclick=\"bkOpen('"+x.id+"')\">📂 Ochish</button></div>"}).join("");
+ if(V.bo){var L=V.bo.L,gs=(L.g||[]).filter(function(g){return !g.ar});
+  h+="<div class='c' style='margin-top:10px;border-color:var(--pr)'><div class='sp'><b>📂 "+dt(V.bo.t)+" zaxirasi</b><button class='b' onclick='bkClose()'>✕</button></div><div class='mu' style='margin-top:4px'>Guruhlar: "+(L.g||[]).length+" · oʻquvchilar: "+(L.s||[]).length+" · testlar: "+(L.t||[]).length+"</div><label>Faqat bitta guruhni tiklash</label><select id='bgs'>"+gs.map(function(g){return "<option value='"+g.id+"'>"+esc(g.n)+"</option>"}).join("")+"</select><div class='r'><button class='b on' onclick='bkRG()'>♻️ Shu guruhni tiklash</button></div><div class='r'><button class='b' onclick='bkRA()'>⚠️ Butun bazani tiklash</button></div><div class='mu' style='margin-top:6px'>Tiklashdan oldin hozirgi holat ham avtomatik zaxiraga olinadi, shuning uchun xatoni qaytarish mumkin.</div></div>"}
+ return h+"</div>"};
+window.bkLoad=async function(){try{V.bl=await window.bkList()}catch(e){V.bl=false}R()};
+window.bkSaveNow=async function(l){if(!D.s.length)throw new Error("Baza boʻsh");var j=JSON.stringify(D);await window.bkSave(l,j);return j.length};
+window.bkNow=async function(){try{await window.bkSaveNow("qoʻlda");toast("✅ Zaxira olindi")}catch(e){alert("Zaxira olinmadi: "+(e.code||e.message)+"\nFirebase qoidalarini tekshiring");return}await window.bkLoad()};
+window.bkOpen=async function(id){var x=(V.bl||[]).find(function(q){return q.id==id});try{var j=await window.bkGet(id);V.bo={id:id,t:x?x.t:Date.now(),L:Object.assign(ne(),JSON.parse(j))};R()}catch(e){alert("Zaxira oʻqilmadi")}};
+window.bkClose=function(){V.bo=null;R()};
+function apply(mf,txt){if(!ref)return;ref.set(mf).then(function(o){D=Object.assign(ne(),o);V.bo=null;R();toast("✅ "+txt)}).catch(function(){alert("Tiklanmadi. Internetni tekshiring")})}
+window.bkRG=async function(){var g=$("bgs")&&$("bgs").value;if(!V.bo||!g)return;var gn=(V.bo.L.g.find(function(x){return x.id==g})||{}).n;
+ if(!confirm("«"+gn+"» guruhi "+dt(V.bo.t)+" holatiga qaytariladi: oʻquvchilar, davomat, toʻlov va testlar. Shundan keyin kiritilgan maʼlumot shu guruhda yoʻqoladi. Davom etasizmi?"))return;
+ try{await window.bkSaveNow("tiklashdan oldin")}catch(e){alert("Avval zaxira olib boʻlmadi, tiklash bekor qilindi: "+(e.code||e.message));return}
+ var L=JSON.parse(JSON.stringify(V.bo.L));apply(function(c){return mg(c,L,[g])},"«"+gn+"» tiklandi")};
+window.bkRA=async function(){if(!V.bo)return;if(!confirm("BUTUN baza "+dt(V.bo.t)+" holatiga qaytariladi. Shundan keyin kiritilgan hamma maʼlumot yoʻqoladi. Davom etasizmi?"))return;
+ try{await window.bkSaveNow("tiklashdan oldin")}catch(e){alert("Avval zaxira olib boʻlmadi, tiklash bekor qilindi: "+(e.code||e.message));return}
+ var L=JSON.parse(JSON.stringify(V.bo.L));apply(function(c){return Object.assign(ne(),L)},"Butun baza tiklandi")};
+window.autoBk=async function(){if(run||!isA()||!D.s.length)return;run=1;
+ try{var l=await window.bkList(),last=l.find(function(x){return x.l=="auto"||x.l=="qoʻlda"});
+  if(!last||Date.now()-last.t>7*864e5){await window.bkSaveNow("auto");l=await window.bkList()}
+  var cnt={};for(var i=0;i<l.length;i++){var k=l[i].l;cnt[k]=(cnt[k]||0)+1;if(cnt[k]>8)await window.bkDel(l[i].id)}
+  V.bl=await window.bkList();if(V.v=="h")R()}catch(e){}};
 })();
 </script>
 </body>
