@@ -51,7 +51,7 @@ label{font-size:13px;color:var(--mu);display:block;margin-top:8px}
 </div>
 <div id="zm" class="zm" onclick="zm(0)"></div>
 <script>
-var ADM="cambridgemathematicscentre",API="https://markaz-bot.cambridgemathematicscentre.workers.dev";
+var ADME=["cambridgemathematicscentre@markaz.uz","nozlisalomova0809@gmail.com"],API="https://markaz-bot.cambridgemathematicscentre.workers.dev";
 var MN=["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"],DN={1:"Du",2:"Se",3:"Chor",4:"Pay",5:"Ju",6:"Sha",0:"Yak"},DO=[1,2,3,4,5,6,0];
 var ASTART="2026-11-15";
 function ne(){return{g:[],s:[],a:{},p:{},t:[],h:{}}}
@@ -66,7 +66,7 @@ function esc(t){return String(t==null?"":t).replace(/[&<>"]/g,function(c){return
 function fm(n){return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g," ")}
 function $(i){return document.getElementById(i)}
 function me(){return String(window.ME||"").toLowerCase()}
-function isA(){return me()==ADM}
+function isA(){return ADME.indexOf(String(window.EM||"").toLowerCase())>=0}
 function vis(g){return isA()||(!!g.t&&String(g.t).toLowerCase()==me())}
 function VG(){return D.g.filter(function(g){return vis(g)&&!g.ar})}
 function nb(){return "<span class='bad'>bermadi</span>"}
@@ -323,8 +323,8 @@ window.getPhoto=async id=>{try{const s=await getDoc(doc(fs,"photos",id));return 
 window.doLogin=async()=>{$("le").textContent="";try{await signInWithEmailAndPassword(auth,(function(u){return u.indexOf("@")>0?u:u+"@markaz.uz"})($("lu").value.trim().toLowerCase()),$("lp").value)}catch(e){$("le").textContent="Xato: "+(e.code||e.message)}};
 window.doOut=()=>signOut(auth);
 onAuthStateChanged(auth,u=>{if(un){un();un=null}
- if(!u){window.ME="";$("login").style.display="block";$("main").style.display="none";return}
- window.ME=u.email.split("@")[0].toLowerCase();
+ if(!u){window.ME="";window.EM="";$("login").style.display="block";$("main").style.display="none";return}
+ window.ME=u.email.split("@")[0].toLowerCase();window.EM=u.email.toLowerCase();
  $("login").style.display="none";$("main").style.display="block";$("who").textContent=window.ME;
  if(typeof window.setSave!="function"){$("app").innerHTML="<p class='bad'>Dastur kodi toʻliq yuklanmadi, index.html ni qayta joylang.</p>";return}
  window.setSave(mf=>runTransaction(fs,async tx=>{const s=await tx.get(d);let c={};try{c=s.exists()?JSON.parse(s.data().j):{}}catch(e){c={}}const o=mf(c);tx.set(d,{j:JSON.stringify(o)});return o}));
