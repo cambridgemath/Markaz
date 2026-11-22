@@ -471,7 +471,7 @@ window.bkCard=function(){
  return h+"</div>"};
 function lsh(){try{return +localStorage.getItem("bksh")||0}catch(e){return 0}}
 window.bkShare=async function(){var j=JSON.stringify(D),d=new Date(),nm="zaxira-"+dstr(d)+"-"+pad(d.getHours())+pad(d.getMinutes())+".json",txt="💾 Cambridge Mathematics Centre zaxirasi\n"+dt(d.getTime())+" · "+Math.round(j.length/1024)+" KB\n\n"+bsum();
- try{var f=new File([j],nm,{type:"application/json"});
+ try{var f=new File([j],nm+".txt",{type:"text/plain"});
   if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],text:txt,title:nm});try{localStorage.setItem("bksh",String(Date.now()))}catch(e){}R();return}catch(e){if(e&&e.name=="AbortError")return}}
   var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([j],{type:"application/json"}));a.download=nm;document.body.appendChild(a);a.click();a.remove();try{localStorage.setItem("bksh",String(Date.now()))}catch(e){}toast("⬇ Fayl yuklab olindi. Telegramda kanalga qoʻlda tashlang");R()}catch(e){alert("Ulashib boʻlmadi: "+(e.message||e))}};
 window.bkLoad=async function(){try{V.bl=await window.bkList()}catch(e){V.bl=false}R()};
@@ -565,4 +565,4 @@ R=function(){
 })();
 </script>
 </body>
- </html>
+</html>
