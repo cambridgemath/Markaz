@@ -2,9 +2,10 @@
 <html lang="uz">
 <head>
 <meta charset="utf-8">
-<script>window.onerror=function(m,s,l){var e=document.createElement("pre");e.style.cssText="color:#c00;white-space:pre-wrap;font-size:13px;padding:8px";e.textContent="XATO: "+m+" (qator "+l+")";(document.body||document.documentElement).appendChild(e)};</script>
+<script>window.onerror=function(m,s,l){if(/config\.js/.test(String(s||"")))return;var e=document.createElement("pre");e.style.cssText="color:#c00;white-space:pre-wrap;font-size:13px;padding:8px";e.textContent="XATO: "+m+" (qator "+l+")";(document.body||document.documentElement).appendChild(e)};</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Matematika markazi — kabinet</title>
+<script>document.write('<script src="config.js?v='+Date.now()+'"><\/script>')</script>
 <style>
 :root{--bg:#f5f7fb;--card:#fff;--tx:#1b2430;--mu:#6b7686;--pr:#2563eb;--prt:#fff;--bd:#e3e8f0;--ok:#16a34a;--bad:#dc2626;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f141b;--card:#18202b;--tx:#e8edf5;--mu:#93a0b3;--pr:#5b8cff;--prt:#0b1020;--bd:#2a3442;--ok:#4ade80;--bad:#f87171;color-scheme:dark}}
@@ -46,14 +47,17 @@ label{font-size:13px;color:var(--mu);display:block;margin-top:8px}
 </head>
 <body>
 <div class="w">
-<div id="login" style="display:none"><h1>📒 Matematika markazi</h1><div class="c"><div class="r"><input id="lu" placeholder="Login" autocapitalize="none" autocomplete="username"></div><div class="r"><input id="lp" type="password" placeholder="Parol" autocomplete="current-password"></div><div class="r"><button class="b on" onclick="doLogin()">Kirish</button></div><div id="le" class="bad" style="margin-top:8px"></div></div></div>
+<div id="login" style="display:none"><h1 id="ht">📒 Matematika markazi</h1><div class="c"><div class="r"><input id="lu" placeholder="Login" autocapitalize="none" autocomplete="username"></div><div class="r"><input id="lp" type="password" placeholder="Parol" autocomplete="current-password"></div><div class="r"><button class="b on" onclick="doLogin()">Kirish</button></div><div id="le" class="bad" style="margin-top:8px"></div></div></div>
 <div id="main" style="display:none"><div class="sp" style="margin-bottom:6px"><span class="mu">👤 <b id="who"></b></span><button class="b" onclick="doOut()">Chiqish</button></div><div id="app"></div></div>
 </div>
 <div id="zm" class="zm" onclick="zm(0)"></div>
 <script>
-var ADME=["cambridgemathematicscentre@markaz.uz","nozlisalomova0809@gmail.com"],STF=["musobekteacher","umidteacher"],API="https://markaz-bot.cambridgemathematicscentre.workers.dev";
+/* Sozlama: config.js boʻlsa shu yerdagi qiymatlar oʻrniga u ishlatiladi (har fan/markaz uchun alohida) */
+var CF=window.CFG||{};
+var ADME=CF.admins||["cambridgemathematicscentre@markaz.uz","nozlisalomova0809@gmail.com"],STF=CF.staff||["musobekteacher","umidteacher"],API=CF.api||"https://markaz-bot.cambridgemathematicscentre.workers.dev",CN=CF.name||"Cambridge Mathematics Centre",TN=CF.title||"Matematika markazi",SUNT=CF.sunTests!==false,NS=CF.ns||"";
+try{document.title=TN+" — kabinet";document.getElementById("ht").textContent="📒 "+TN}catch(e){}
 var MN=["yanvar","fevral","mart","aprel","may","iyun","iyul","avgust","sentabr","oktabr","noyabr","dekabr"],DN={1:"Du",2:"Se",3:"Chor",4:"Pay",5:"Ju",6:"Sha",0:"Yak"},DO=[1,2,3,4,5,6,0];
-var ASTART="2026-11-15";
+var ASTART=CF.astart||"2026-11-15";
 function ne(){return{g:[],s:[],a:{},p:{},t:[],h:{}}}
 var D=ne(),ref=null;
 function dstr(d){return new Date(d.getTime()-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)}
@@ -148,19 +152,21 @@ function rmCP(f){var s=D.s.find(function(x){return x.id==V.s});if(!s)return;s.cp
 function hcp(s){return (s.cp||[]).some(function(x){return x.p>0})}
 function rcp(s,m){if(hcp(s))s.cp=(s.cp||[]).filter(function(x){return x.f<m}).concat([{f:m,p:0}])}
 function debt(s){var t=0;mrange(sst(s),cm()).forEach(function(m){t+=Math.max(0,due(s,m)-(D.p[s.id+"|"+m]||0))});return t}
-function dyl(g){var d=g.dy||[],t=d.indexOf(0)<0?" + Yak (test)":"";if(!d.length)return "dars kunlari belgilanmagan"+t;return DO.filter(function(x){return d.indexOf(x)>=0}).map(function(x){return DN[x]}).join("-")+t}
+function dyl(g){var d=g.dy||[],t=(SUNT&&d.indexOf(0)<0)?" + Yak (test)":"";if(!d.length)return "dars kunlari belgilanmagan"+t;return DO.filter(function(x){return d.indexOf(x)>=0}).map(function(x){return DN[x]}).join("-")+t}
 function ldates(g,n){var o=[],dy=g.dy||[];var d=new Date();d.setHours(12,0,0,0);for(var c=0;o.length<n&&c<120;c++){if(dy.indexOf(d.getDay())>=0||(d.getDay()==0&&dstr(d)>=TSTART)){var s=dstr(d);if(s>=gst(g)+"-01")o.push(s)}d.setDate(d.getDate()-1)}return o.reverse()}
 function curD(g){var l=ldates(g,8);if(!V.d||V.dg!=g.id){V.d=l.length?l[l.length-1]:td();V.dg=g.id}return V.d}
 function hk(g,d){return D.h[g.id+"|"+d]}
 /* Yakshanba testlari: har yakshanba barcha guruhlarda test olinadi; bayram va h.k. sabab bo'lmasa — "Olinmadi" deb belgilanadi. Hisob TSTART sanasidan boshlanadi. Yakshanbadan keyingi 6 kun ichida kiritilgan test ham shu yakshanba uchun hisoblanadi */
-var TSTART="2026-11-15";
-function suns(g,n){var o=[],d=new Date();d.setHours(12,0,0,0);while(d.getDay()!=0)d.setDate(d.getDate()-1);for(var c=0;o.length<n&&c<80;c++){var s=dstr(d);if(s<TSTART)break;if(s>=gst(g)+"-01")o.push(s);d.setDate(d.getDate()-7)}return o}
+var TSTART=SUNT?"2026-11-15":"2099-12-31";
+/* Guruh ochilgan kun: yangi guruhda ochilishidan oldingi yakshanbalar hisobga olinmaydi. Eski guruhlarda kun id ichidagi vaqtdan olinadi */
+function gcd(g){if(g.cd)return g.cd;var t=parseInt(String(g.id||"").slice(0,8),36);return t>1.6e12&&t<Date.now()+864e5?dstr(new Date(t)):""}
+function suns(g,n){var o=[],d=new Date();d.setHours(12,0,0,0);while(d.getDay()!=0)d.setDate(d.getDate()-1);for(var c=0;o.length<n&&c<80;c++){var s=dstr(d);if(s<TSTART)break;if(s>=gst(g)+"-01"&&s>=gcd(g))o.push(s);d.setDate(d.getDate()-7)}return o}
 function tsk(g,d){return D.h[g.id+"|"+d+"|t"]}
 function thas(g,d){var e=new Date(d+"T12:00:00");e.setDate(e.getDate()+6);var f=dstr(e);return D.t.some(function(t){return t.g==g.id&&t.d>=d&&t.d<=f})}
 function tPend(g){var l=suns(g,1);return l.length&&!thas(g,l[0])&&!tsk(g,l[0])?l[0]:""}
 function tSk(d){var g=GR(),k=g.id+"|"+d+"|t";if(D.h[k])delete D.h[k];else{if(thas(g,d)){alert("Bu haftaga test kiritilgan");return}D.h[k]=1}sv(g.id);R()}
 function pT(d){V.tn="Haftalik test "+fd(d);V.td=d;R();var e=$("nt");if(e)e.scrollIntoView({behavior:"smooth"})}
-function addG(){var n=$("gn").value.trim();if(!n)return;var id=uid(),dv=$("gd").value;D.g.push({id:id,n:n,pr:+$("gp").value||0,tm:$("gt").value.trim(),st:$("gm").value||cm(),dy:dv?dv.split(",").map(Number):[],t:$("gtl").value.trim().toLowerCase().replace(/@.*$/,"")});sv(id);R()}
+function addG(){var n=$("gn").value.trim();if(!n)return;var id=uid(),dv=$("gd").value;D.g.push({id:id,cd:td(),n:n,pr:+$("gp").value||0,tm:$("gt").value.trim(),st:$("gm").value||cm(),dy:dv?dv.split(",").map(Number):[],t:$("gtl").value.trim().toLowerCase().replace(/@.*$/,"")});sv(id);R()}
 function gS(v){var g=GR();g.st=v;sv(g.id)}
 function gDay(n){var g=GR();g.dy=g.dy||[];var i=g.dy.indexOf(n);if(i<0)g.dy.push(n);else g.dy.splice(i,1);sv(g.id);V.dg="";R()}
 function gPre(n){var g=GR();g.dy=n==1?[1,3,5]:[2,4,6];sv(g.id);V.dg="";R()}
@@ -201,10 +207,10 @@ function tA(tid,sid){var t=D.t.find(function(q){return q.id==tid});if(!t)return;
 function scd(t,i,v){V.sd[t]=V.sd[t]||{};V.sd[t][i]=v;var n=Object.keys(V.sd[t]).length,e=$("sb"+t);if(e){e.disabled=false;e.className="b on";e.textContent="💾 Saqlash ("+n+")"}}
 function saveT(tid){var x=D.t.find(function(q){return q.id==tid}),d=V.sd[tid]||{};if(!x)return;Object.keys(d).forEach(function(i){var v=d[i];if(v===""||v==null)delete x.sc[i];else x.sc[i]=+v});delete V.sd[tid];sv(x.g);R();toast("✅ Ballar saqlandi. Ota-onaga yuborish uchun 📨 tugmasini bosing")}
 function mAtt(sid,m){var c=0,t=0;for(var k in D.a){var dd=k.split("|")[1];if(dd>=ASTART&&dd.slice(0,7)==m&&D.a[k][sid]!=null){t++;if(D.a[k][sid])c++}}return[c,t]}
-var BOT="cambridgemath_bot",syncT=null,lastSnap="";
+var BOT=CF.bot||"cambridgemath_bot",syncT=null,lastSnap="";
 function l9(p){return String(p||"").replace(/\D/g,"").slice(-9)}
-function lsk(){try{return localStorage.getItem("bk")||""}catch(e){return ""}}
-function setKey(){var k=prompt("Bot kaliti (ADMIN_KEY):");if(k&&k.trim()){try{localStorage.setItem("bk",k.trim())}catch(e){}lastSnap="";toast("Kalit saqlandi");syncSoon()}}
+function lsk(){try{return localStorage.getItem("bk"+NS)||""}catch(e){return ""}}
+function setKey(){var k=prompt("Bot kaliti (ADMIN_KEY):");if(k&&k.trim()){try{localStorage.setItem("bk"+NS,k.trim())}catch(e){}lastSnap="";toast("Kalit saqlandi");syncSoon()}}
 function toast(m){var e=$("ts");if(!e){e=document.createElement("div");e.id="ts";e.style.cssText="position:fixed;left:12px;right:12px;bottom:14px;background:#1b2430;color:#fff;padding:10px 12px;border-radius:10px;z-index:9998;font-size:14px;text-align:center";document.body.appendChild(e)}e.textContent=m;e.style.display="block";clearTimeout(e._t);e._t=setTimeout(function(){e.style.display="none"},4000)}
 function conn(s){return !!V.bs&&[s.ph,s.ph2].some(function(p){return V.bs[l9(p)]})}
 function bi(s){return V.bs?(conn(s)?" 🟢":" ⚪"):""}
@@ -217,12 +223,12 @@ function syncSoon(){clearTimeout(syncT);syncT=setTimeout(doSync,4000)}
 function doSync(){var k=lsk();if(!k||!ref||!window.ME||!D.s.length)return;var sn=snapshot(),j=JSON.stringify(sn);if(j==lastSnap)return;
  fetch(API+"/sync",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({key:k,snap:sn})}).then(function(r){if(r.ok)lastSnap=j}).catch(function(){})}
 async function statusCheck(){var k=bkey();if(!k)return;var ph=[];VG().forEach(function(g){ST(g.id).forEach(function(s){[s.ph,s.ph2].forEach(function(p){var l=l9(p);if(l.length==9&&ph.indexOf(l)<0)ph.push(l)})})});
- try{var r=await fetch(API+"/status",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({key:k,phones:ph})});var j=await r.json();if(j.error){if(r.status==403){try{localStorage.removeItem("bk")}catch(e){}}alert("Xato: "+j.error);return}V.bs=j.ok||{};R()}catch(e){alert("Internet yoki bot xatosi")}}
-function am(s,v,d){return "📚 Cambridge Mathematics Centre\n"+(v?"✅ "+s.n+" "+fd(d)+" kuni darsga keldi.":"❌ "+s.n+" "+fd(d)+" kuni darsga kelmadi.")}
-function tm(t,s,upd){var p=Math.round(t.sc[s.id]/t.mx*100);return "📝 Cambridge Mathematics Centre\n"+(upd?"🔄 Natija yangilandi\n":"")+s.n+": "+t.t+" ("+(t.k=="o"?"oylik":"haftalik")+" test, "+fd(t.d)+")\nNatija: "+t.sc[s.id]+"/"+t.mx+" ("+p+"%)"+(t.k=="o"&&p>=100?"\n🎓 Ofarin! Bu oy toʻlov bepul!":"")}
+ try{var r=await fetch(API+"/status",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({key:k,phones:ph})});var j=await r.json();if(j.error){if(r.status==403){try{localStorage.removeItem("bk"+NS)}catch(e){}}alert("Xato: "+j.error);return}V.bs=j.ok||{};R()}catch(e){alert("Internet yoki bot xatosi")}}
+function am(s,v,d){return "📚 "+CN+"\n"+(v?"✅ "+s.n+" "+fd(d)+" kuni darsga keldi.":"❌ "+s.n+" "+fd(d)+" kuni darsga kelmadi.")}
+function tm(t,s,upd){var p=Math.round(t.sc[s.id]/t.mx*100);return "📝 "+CN+"\n"+(upd?"🔄 Natija yangilandi\n":"")+s.n+": "+t.t+" ("+(t.k=="o"?"oylik":"haftalik")+" test, "+fd(t.d)+")\nNatija: "+t.sc[s.id]+"/"+t.mx+" ("+p+"%)"+(t.k=="o"&&p>=100?"\n🎓 Ofarin! Bu oy toʻlov bepul!":"")}
 function bk(){var b=new Blob([JSON.stringify(D)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="zaxira-"+td()+".json";a.click()}
 function upPh(inp){var f=inp.files[0],id=V.s;if(!f)return;var im=new Image();im.onload=function(){var z=640,k=Math.min(1,z/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=im.width*k;c.height=im.height*k;c.getContext("2d").drawImage(im,0,0,c.width,c.height);var u=c.toDataURL("image/jpeg",.8);window.putPhoto(id,u).then(function(){V.ph[id]=u;R()}).catch(function(){alert("Rasm saqlanmadi")})};im.src=URL.createObjectURL(f)}
-function bkey(){var k="";try{k=localStorage.getItem("bk")||""}catch(e){}if(!k){k=(prompt("Bot kaliti (ADMIN_KEY) ni kiriting:")||"").trim();if(k){try{localStorage.setItem("bk",k)}catch(e){}}}return k}
+function bkey(){var k="";try{k=localStorage.getItem("bk"+NS)||""}catch(e){}if(!k){k=(prompt("Bot kaliti (ADMIN_KEY) ni kiriting:")||"").trim();if(k){try{localStorage.setItem("bk"+NS,k)}catch(e){}}}return k}
 function item(s,text){return{name:s.n,phones:[s.ph,s.ph2].filter(Boolean),text:text}}
 async function snd(items){
  if(!items.length){alert("Yuboriladigan xabar yoʻq");return}
@@ -230,17 +236,17 @@ async function snd(items){
  var k=bkey();if(!k)return;var sent=0,miss=[];
  for(var i=0;i<items.length;i+=6){
   try{var r=await fetch(API+"/send",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({key:k,items:items.slice(i,i+6)})});var j=await r.json();
-   if(j.error){if(r.status==403){try{localStorage.removeItem("bk")}catch(e){}}alert("Xato: "+j.error);return}
+   if(j.error){if(r.status==403){try{localStorage.removeItem("bk"+NS)}catch(e){}}alert("Xato: "+j.error);return}
    sent+=j.sent||0;miss=miss.concat(j.miss||[])}catch(e){alert("Internet yoki bot xatosi");return}}
  alert("Yuborildi: "+sent+" ta xabar."+(miss.length?"\nBotga ulanmagan ("+miss.length+"): "+miss.slice(0,15).join(", "):""))}
 function sndA(){if(Object.keys(V.dr).length){alert("Avval davomatni saqlang");return}var g=GR(),a=D.a[dk()]||{};
  snd(STX(g.id).filter(function(s){return a[s.id]!=null}).map(function(s){return item(s,am(s,a[s.id],V.d))}))}
 function sndT(id){var t=D.t.find(function(q){return q.id==id}),g=GR();if(Object.keys(V.sd[id]||{}).length){alert("Avval ballarni saqlang");return}
  snd(STX(g.id).filter(function(s){return t.sc[s.id]!=null&&!ab(t,s)}).map(function(s){return item(s,tm(t,s,false))}))}
-function sndQ(){var g=GR(),o=[];ST(g.id).forEach(function(s){var d=debt(s);if(d>0)o.push(item(s,"⚠️ Cambridge Mathematics Centre\n💰 TOʻLOV TALABI\n\n👤 "+s.n+"\nJami qarzdorlik: "+fm(d)+" soʻm.\n\nQarzni eng yaqin kunlarda toʻlashingizni talab qilamiz. Toʻlov allaqachon qilingan boʻlsa, markaz maʼmuriyatiga xabar bering."))});snd(o)}
+function sndQ(){var g=GR(),o=[];ST(g.id).forEach(function(s){var d=debt(s);if(d>0)o.push(item(s,"⚠️ "+CN+"\n💰 TOʻLOV TALABI\n\n👤 "+s.n+"\nJami qarzdorlik: "+fm(d)+" soʻm.\n\nQarzni eng yaqin kunlarda toʻlashingizni talab qilamiz. Toʻlov allaqachon qilingan boʻlsa, markaz maʼmuriyatiga xabar bering."))});snd(o)}
 function sndN(){var t=$("nw").value.trim();if(!t){alert("Xabar matnini yozing");return}var by={};
  VG().forEach(function(g){ST(g.id).forEach(function(s){var ph=[s.ph,s.ph2].filter(Boolean);if(!ph.length)return;var k=l9(ph[0]),e=by[k]=by[k]||{ph:[],n:[]};ph.forEach(function(p){if(e.ph.map(l9).indexOf(l9(p))<0)e.ph.push(p)});e.n.push(s.n)})});
- snd(Object.keys(by).map(function(k){var e=by[k];return{name:e.n.join(", "),phones:e.ph,text:"📢 Cambridge Mathematics Centre\n👤 "+e.n.join(", ")+"\n\n"+t}}))}
+ snd(Object.keys(by).map(function(k){var e=by[k];return{name:e.n.join(", "),phones:e.ph,text:"📢 "+CN+"\n👤 "+e.n.join(", ")+"\n\n"+t}}))}
 function R(){
  var h="",A=isA(),O=isO(),st=ref?"🔗 umumiy baza":"💾 faqat shu qurilmada";
  if(V.v=="g"&&!vis(GR()))V.v="h";
@@ -250,7 +256,7 @@ function R(){
   D.s.forEach(function(s){if(s.ar||vi.indexOf(s.g)<0)return;col+=D.p[s.id+"|"+cmn]||0;var d=debt(s);if(d>0)dl.push([s,d])});
   var bsum="";if(V.bs){var bl=[];VG().forEach(function(g){ST(g.id).forEach(function(s){bl.push(s)})});var nc=bl.filter(function(s){return !conn(s)});bsum="<div style='margin-top:8px'>🟢 Ulangan: <b class='ok'>"+(bl.length-nc.length)+"</b> / "+bl.length+" oʻquvchi</div>"+(nc.length?"<div class='mu' style='margin-top:6px'>⚪ Ulanmagan: "+nc.slice(0,40).map(function(s){return esc(s.n)+((s.ph||s.ph2)?"":" (raqam yoʻq)")}).join(", ")+(nc.length>40?" va yana "+(nc.length-40)+" ta":"")+"</div><div class='mu' style='margin-top:6px'>Ota-onalarga yuboring: t.me/"+BOT+"</div>":"")}
   dl.sort(function(a,b){return b[1]-a[1]});var tdb=dl.reduce(function(a,x){return a+x[1]},0);
-  h="<h1>📒 Matematika markazi</h1><div class='mu'>"+st+(A?" · admin":"")+"</div><div class='c' style='margin-top:10px'><input id='q' type='search' placeholder='🔍 Oʻquvchi ismi yoki telefon raqami' value='"+esc(V.q)+"' oninput='srch(this.value)' autocomplete='off' autocapitalize='none'><div id='sr'>"+srHtml()+"</div></div><div>"+(vg.map(function(g){var tp=tPend(g);return "<div class='c sp'><div><button class='nm' onclick=\"go('g','"+g.id+"')\">"+esc(g.n)+"</button><div class='mu'>"+ST(g.id).length+" oʻquvchi"+(XS(g.id).length?" (+"+XS(g.id).length+" qoʻshimcha)":"")+" · "+fm(g.pr)+" soʻm/oy</div><div class='mu'>"+dyl(g)+(g.t?" · 👨‍🏫 "+esc(g.t):"")+"</div>"+(tp?"<div class='bad' style='font-size:14px'>⚠️ "+fd(tp)+" yakshanba testi kiritilmagan</div>":"")+"</div><button class='b' onclick=\"go('g','"+g.id+"')\">Kabinet ›</button></div>"}).join("")||"<div class='c mu'>Sizga hali guruh biriktirilmagan. Admin bilan bogʻlaning.</div>")+"</div>"+
+  h="<h1>📒 "+esc(TN)+"</h1><div class='mu'>"+st+(A?" · admin":"")+"</div><div class='c' style='margin-top:10px'><input id='q' type='search' placeholder='🔍 Oʻquvchi ismi yoki telefon raqami' value='"+esc(V.q)+"' oninput='srch(this.value)' autocomplete='off' autocapitalize='none'><div id='sr'>"+srHtml()+"</div></div><div>"+(vg.map(function(g){var tp=tPend(g);return "<div class='c sp'><div><button class='nm' onclick=\"go('g','"+g.id+"')\">"+esc(g.n)+"</button><div class='mu'>"+ST(g.id).length+" oʻquvchi"+(XS(g.id).length?" (+"+XS(g.id).length+" qoʻshimcha)":"")+" · "+fm(g.pr)+" soʻm/oy</div><div class='mu'>"+dyl(g)+(g.t?" · 👨‍🏫 "+esc(g.t):"")+"</div>"+(tp?"<div class='bad' style='font-size:14px'>⚠️ "+fd(tp)+" yakshanba testi kiritilmagan</div>":"")+"</div><button class='b' onclick=\"go('g','"+g.id+"')\">Kabinet ›</button></div>"}).join("")||"<div class='c mu'>Sizga hali guruh biriktirilmagan. Admin bilan bogʻlaning.</div>")+"</div>"+
   (A?"<div class='c'><b>Yangi guruh</b><div class='r'><input id='gn' placeholder='Guruh nomi'></div><div class='r'><input id='gp' type='number' placeholder='Oylik toʻlov (soʻm)'><input id='gt' placeholder='Vaqti'></div><label>Dars kunlari</label><select id='gd'><option value='1,3,5'>Toq (Du-Chor-Ju)</option><option value='2,4,6'>Juft (Se-Pay-Sha)</option><option value=''>Keyin belgilayman</option></select><label>Oʻqituvchi logini (masalan: ustoz1)</label><input id='gtl' autocapitalize='none'><label>Guruh ochilgan oy</label><input id='gm' type='month' value='"+cmn+"'><div class='r'><button class='b on' onclick='addG()'>＋ Guruh qoʻshish</button></div></div>":"")+
   "<div class='c'><b>📈 Hisobot</b><div style='margin-top:6px'>Shu oy tushum: <b class='ok'>"+fm(col)+"</b> soʻm</div><div>Jami qarz: <b class='bad'>"+fm(tdb)+"</b> soʻm ("+dl.length+" kishi)</div>"+dl.slice(0,15).map(function(x){return "<div class='sp' style='margin-top:6px'><button class='nm' onclick=\"go('u','"+x[0].g+"','"+x[0].id+"')\">"+esc(x[0].n)+"</button><span class='bad'>"+fm(x[1])+"</span></div>"}).join("")+"</div>"+
   "<div class='c'><b>📢 Ota-onalarga yangilik</b><div class='r'><textarea id='nw' rows='3' placeholder='Xabar matni...'></textarea></div><div class='r'><button class='b on' onclick='sndN()'>📨 Hammaga yuborish</button></div></div>"+
@@ -277,7 +283,7 @@ function R(){
    h+="<input type='month' value='"+V.m+"' onchange=\"S('m',this.value)\"><div class='c' style='margin-top:8px'>Yigʻildi: <b class='ok'>"+fm(tot)+"</b> soʻm · Qarz: <b class='bad'>"+fm(dbt)+"</b> soʻm<div class='mu' style='margin-top:4px'>Toʻlagan: "+np+" · Qarzdor: "+nd+" · Bepul: "+nf+"</div></div><div class='r' style='margin:0 0 10px'><button class='b' onclick='sndQ()'>📨 Qarzdorlarga talab yuborish</button></div>"+gnone(fp)+rows+"<div class='sv'><button id='psb' class='b"+(pdn()?" on":"")+"' style='width:100%;padding:14px'"+(pdn()?"":" disabled")+" onclick='savePd()'>💾 Toʻlovlarni saqlash"+(pdn()?" ("+pdn()+")":"")+"</button></div>";}
   if(V.tab=="t"){
    var ft=gf(ss);
-   h+="<div class='c'><b>📆 Yakshanba testlari</b><div class='mu'>Har yakshanba test olinadi. Bayram yoki boshqa sabab boʻlsa — «Olinmadi» deb belgilang.</div>"+(suns(g,6).map(function(d){var has=thas(g,d),sk=tsk(g,d);return "<div class='sp' style='margin-top:8px'><b>"+fd(d)+"</b>"+(has?"<span class='ok'>✔ Olingan</span>":sk?"<div class='r' style='margin:0;align-items:center'><span class='bad'>🚫 Olinmadi</span><button class='b' onclick=\"tSk('"+d+"')\">↩</button></div>":"<div class='r' style='margin:0;align-items:center'><span class='mu'>⏳</span><button class='b on' onclick=\"pT('"+d+"')\">＋ Test</button><button class='b' onclick=\"tSk('"+d+"')\">🚫 Olinmadi</button></div>")+"</div>"}).join("")||"<div class='mu' style='margin-top:8px'>Birinchi yakshanba testi: "+fd(TSTART)+"</div>")+"</div>"+
+   h+=(SUNT?"<div class='c'><b>📆 Yakshanba testlari</b><div class='mu'>Har yakshanba test olinadi. Bayram yoki boshqa sabab boʻlsa — «Olinmadi» deb belgilang.</div>"+(suns(g,6).map(function(d){var has=thas(g,d),sk=tsk(g,d);return "<div class='sp' style='margin-top:8px'><b>"+fd(d)+"</b>"+(has?"<span class='ok'>✔ Olingan</span>":sk?"<div class='r' style='margin:0;align-items:center'><span class='bad'>🚫 Olinmadi</span><button class='b' onclick=\"tSk('"+d+"')\">↩</button></div>":"<div class='r' style='margin:0;align-items:center'><span class='mu'>⏳</span><button class='b on' onclick=\"pT('"+d+"')\">＋ Test</button><button class='b' onclick=\"tSk('"+d+"')\">🚫 Olinmadi</button></div>")+"</div>"}).join("")||"<div class='mu' style='margin-top:8px'>Birinchi yakshanba testi: "+fd(TSTART)+"</div>")+"</div>":"")+
    "<div class='c' id='nt'><b>Yangi test</b><div class='r'><input id='tt' placeholder='Test nomi' value='"+esc(V.tn)+"'></div><div class='r'><select id='tk'><option value='h'>Haftalik test</option><option value='o'>Oylik test (100% = shu oy bepul)</option></select></div><div class='r'><input id='tm' type='number' placeholder='Maks. ball'><input id='tdt' type='date' value='"+(V.td||td())+"'></div><div class='r'><button class='b on' onclick='addT()'>＋ Test qoʻshish</button></div></div>"+
    (V.gq?gnone(ft):"")+
    D.t.filter(function(t){return t.g==g.id}).reverse().map(function(t,ti){var op=tOpen(t,ti),ps=ss.filter(function(s){return !ab(t,s)}),na=ss.length-ps.length,ha=!!D.a[g.id+"|"+t.d],nd2=Object.keys(V.sd[t.id]||{}).length,sc0=ps.filter(function(s){return t.sc[s.id]!=null}).length;
@@ -320,7 +326,7 @@ R();
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {getFirestore,doc,onSnapshot,setDoc,getDoc,runTransaction,collection,getDocs,query,orderBy,limit,deleteDoc} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-const cfg={apiKey:"AIzaSyBk3XT1hjnUamKLNgeJy2pWkIr8GB6n5kE",authDomain:"cambridge-math.firebaseapp.com",projectId:"cambridge-math",storageBucket:"cambridge-math.firebasestorage.app",messagingSenderId:"441905620908",appId:"1:441905620908:web:0cf78ca6a43f5606463c09"};
+const cfg=(window.CFG&&window.CFG.fb)||{apiKey:"AIzaSyBk3XT1hjnUamKLNgeJy2pWkIr8GB6n5kE",authDomain:"cambridge-math.firebaseapp.com",projectId:"cambridge-math",storageBucket:"cambridge-math.firebasestorage.app",messagingSenderId:"441905620908",appId:"1:441905620908:web:0cf78ca6a43f5606463c09"};
 const app=initializeApp(cfg),auth=getAuth(app),fs=getFirestore(app),d=doc(fs,"center","data");
 const $=i=>document.getElementById(i);let un=null;
 window.putPhoto=(id,u)=>setDoc(doc(fs,"photos",id),{d:u});
@@ -424,7 +430,7 @@ function pages(o){var W=1240,H=1754,M=70,rh=54,out=[],cv,cx,y,pn=0,tw=W-2*M,cw=o
   r.forEach(function(v,i){var t=Array.isArray(v)?v[0]:v,c=Array.isArray(v)?v[1]:"#1b2430",a=o.cols[i].a;cx.fillStyle=c;cx.textAlign=a=="r"?"right":"left";cx.fillText(fit(t,cw[i]-20),a=="r"?x+cw[i]-10:x+10,y+rh/2);x+=cw[i]});
   cx.strokeStyle="#dde3ea";cx.beginPath();cx.moveTo(M,y+rh);cx.lineTo(M+tw,y+rh);cx.stroke();y+=rh});
  if(o.foot&&o.foot.length){if(y+o.foot.length*40+20>H-M-50)np(0);y+=16;cx.textAlign="left";cx.fillStyle="#1b2430";cx.font="bold 28px sans-serif";o.foot.forEach(function(l){cx.fillText(fit(l,tw),M,y+20);y+=40})}
- out.forEach(function(c,i){var q=c.getContext("2d");q.textBaseline="middle";q.textAlign="left";q.font="22px sans-serif";q.fillStyle="#888";q.fillText("Cambridge Mathematics Centre",M,H-M+10);q.textAlign="right";q.fillText((i+1)+" / "+out.length,W-M,H-M+10)});
+ out.forEach(function(c,i){var q=c.getContext("2d");q.textBaseline="middle";q.textAlign="left";q.font="22px sans-serif";q.fillStyle="#888";q.fillText(CN,M,H-M+10);q.textAlign="right";q.fillText((i+1)+" / "+out.length,W-M,H-M+10)});
  return out}
 function b64(u){var s=atob(u.split(",")[1]),a=new Uint8Array(s.length);for(var i=0;i<s.length;i++)a[i]=s.charCodeAt(i);return a}
 function mkPdf(cvs){var ch=[],off=[],len=0;function put(x){var a=typeof x=="string"?new Uint8Array(x.length).map(function(_,i){return x.charCodeAt(i)&255}):x;ch.push(a);len+=a.length}
@@ -477,11 +483,11 @@ window.bkCard=function(){
  if(V.bo){var L=V.bo.L,gs=(L.g||[]).filter(function(g){return !g.ar});
   h+="<div class='c' style='margin-top:10px;border-color:var(--pr)'><div class='sp'><b>📂 "+dt(V.bo.t)+" zaxirasi</b><button class='b' onclick='bkClose()'>✕</button></div><div class='mu' style='margin-top:4px'>Guruhlar: "+(L.g||[]).length+" · oʻquvchilar: "+(L.s||[]).length+" · testlar: "+(L.t||[]).length+"</div><label>Faqat bitta guruhni tiklash</label><select id='bgs'>"+gs.map(function(g){return "<option value='"+g.id+"'>"+esc(g.n)+"</option>"}).join("")+"</select><div class='r'><button class='b on' onclick='bkRG()'>♻️ Shu guruhni tiklash</button></div><div class='r'><button class='b' onclick='bkRA()'>⚠️ Butun bazani tiklash</button></div><div class='mu' style='margin-top:6px'>Tiklashdan oldin hozirgi holat ham avtomatik zaxiraga olinadi, shuning uchun xatoni qaytarish mumkin.</div></div>"}
  return h+"</div>"};
-function lsh(){try{return +localStorage.getItem("bksh")||0}catch(e){return 0}}
-window.bkShare=async function(){var j=JSON.stringify(D),d=new Date(),nm="zaxira-"+dstr(d)+"-"+pad(d.getHours())+pad(d.getMinutes())+".json",txt="💾 Cambridge Mathematics Centre zaxirasi\n"+dt(d.getTime())+" · "+Math.round(j.length/1024)+" KB\n\n"+bsum();
+function lsh(){try{return +localStorage.getItem("bksh"+NS)||0}catch(e){return 0}}
+window.bkShare=async function(){var j=JSON.stringify(D),d=new Date(),nm="zaxira-"+dstr(d)+"-"+pad(d.getHours())+pad(d.getMinutes())+".json",txt="💾 "+CN+" zaxirasi\n"+dt(d.getTime())+" · "+Math.round(j.length/1024)+" KB\n\n"+bsum();
  try{var f=new File([j],nm+".txt",{type:"text/plain"});
-  if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],text:txt,title:nm});try{localStorage.setItem("bksh",String(Date.now()))}catch(e){}R();return}catch(e){if(e&&e.name=="AbortError")return}}
-  var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([j],{type:"application/json"}));a.download=nm;document.body.appendChild(a);a.click();a.remove();try{localStorage.setItem("bksh",String(Date.now()))}catch(e){}toast("⬇ Fayl yuklab olindi. Telegramda kanalga qoʻlda tashlang");R()}catch(e){alert("Ulashib boʻlmadi: "+(e.message||e))}};
+  if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f],text:txt,title:nm});try{localStorage.setItem("bksh"+NS,String(Date.now()))}catch(e){}R();return}catch(e){if(e&&e.name=="AbortError")return}}
+  var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([j],{type:"application/json"}));a.download=nm;document.body.appendChild(a);a.click();a.remove();try{localStorage.setItem("bksh"+NS,String(Date.now()))}catch(e){}toast("⬇ Fayl yuklab olindi. Telegramda kanalga qoʻlda tashlang");R()}catch(e){alert("Ulashib boʻlmadi: "+(e.message||e))}};
 window.bkLoad=async function(){try{V.bl=await window.bkList()}catch(e){V.bl=false}R()};
 window.bkSaveNow=async function(l){if(!D.s.length)throw new Error("Baza boʻsh");var j=JSON.stringify(D);await window.bkSave(l,j);return j.length};
 window.bkNow=async function(){try{await window.bkSaveNow("qoʻlda");toast("✅ Zaxira olindi")}catch(e){alert("Zaxira olinmadi: "+(e.code||e.message)+"\nFirebase qoidalarini tekshiring");return}await window.bkLoad()};
